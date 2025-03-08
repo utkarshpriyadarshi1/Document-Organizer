@@ -1,7 +1,7 @@
 # e-Dastavej
 
 ## Overview
-This project is a file management system built using Spring MVC. It allows users to upload, search, and manage files. The system supports different user roles like public, clerk, staff, assistant, manager, and admin with varying levels of security.
+This project is a file management system built using Spring MVC. It allows users to upload, search, and manage files. The system supports different user roles like public, clerk, staff, assistant, etc.
 
 ## Features
 - File upload
@@ -16,6 +16,18 @@ This project is a file management system built using Spring MVC. It allows users
 - [Contributing Guide](docs/CONTRIBUTING.md)
 - [Security Guidelines](docs/SECURITY.md)
 
+### Project Documents
+- [Project Proposal](doc/Project_Proposal.md)
+- [Architecture Design](doc/Architecture_Design.md)
+- [Contract Agreement](doc/Contract_Agreement.md)
+- [Cost Estimation on AWS Hosting](doc/Cost_Estimation_on_AWS_Hosting.md)
+- [Design System](doc/Design_System.md)
+- [Project Plan](doc/Project_Plan.md)
+- [Requirements Document](doc/Requirements_Document.md)
+- [Statement of Work (SOW)](doc/Statement_of_Work_(SOW).md)
+- [Design Document](doc/Design_Document.md)
+- [Project Closure Document](doc/Project_Closure_Document.md)
+
 ## Technologies Used
 - Spring MVC
 - JSP
@@ -26,6 +38,7 @@ This project is a file management system built using Spring MVC. It allows users
 - Webpack
 
 ## Getting Started
+
 ### Prerequisites
 - JDK 11 or higher
 - Apache Maven
@@ -64,23 +77,6 @@ This project is a file management system built using Spring MVC. It allows users
     ```bash
     mvn clean install
     ```
-
-
-    This project setup includes:
-
-A pom.xml file for Maven dependencies.
-Application properties for PostgreSQL configuration.
-Webpack configuration for bundling JavaScript and CSS files, including Bootstrap.
-Basic Spring Boot application setup with a home controller and Thymeleaf template.
-Entity classes for Role, User, Category, SubCategory, and File.
-To get started with this project, follow these steps:
-
-Clone the repository or create a new directory and initialize it as a git repository.
-Create a PostgreSQL database named edastavej and update the application.properties file with your database credentials.
-Install Node.js and npm if you haven't already, and run npm install to install Webpack and Bootstrap.
-Build the project using Maven with the command mvn clean install.
-Run the Spring Boot application with the command mvn spring-boot:run.
-Access the application at http://localhost:8080.
 
 6. Deploy the WAR file to your favorite servlet container (e.g., Tomcat).
 
