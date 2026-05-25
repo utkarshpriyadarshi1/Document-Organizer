@@ -1,86 +1,64 @@
-# e-Dastavej
+# e-Dastavej Document Management System
 
 ## Overview
-This project is a file management system built using Spring MVC. It allows users to upload, search, and manage files. The system supports different user roles like public, clerk, staff, assistant, etc.
+This is a standalone, local-first document management system built using a hybrid desktop client-server architecture:
+* **Frontend Client (Tauri + React + Tailwind CSS):** A lightweight native desktop window rendering a React-based user interface.
+* **Backend Service (Spring Boot 3 + Spring Data JPA + SQLite):** A lightweight background service managing document metadata storage, indexing, and deduplication.
 
-## Features
-- File upload
-- File search with filters
-- User and role management
-- Category and subcategory management
-- Admin dashboard
+---
 
-## Documentation
-- [Installation Guide](docs/INSTALLATION.md)
-- [Usage Guide](docs/USAGE.md)
-- [Contributing Guide](docs/CONTRIBUTING.md)
-- [Security Guidelines](docs/SECURITY.md)
+## Directory Structure
+```
+e-dastavej/
+├── backend/                  # Spring Boot 3 & SQLite project
+│   ├── src/                  # Java source files
+│   ├── sql/                  # SQLite tables setup scripts
+│   └── pom.xml               # Maven configuration
+├── frontend/                 # Tauri desktop window & React client
+│   ├── src-tauri/            # Tauri desktop configuration & Rust project
+│   ├── src/                  # React & Tailwind UI code
+│   └── package.json          # Node configuration
+└── docs/                     # Architecture & user guides
+```
 
-### Project Documents
-- [Project Proposal](doc/Project_Proposal.md)
-- [Architecture Design](doc/Architecture_Design.md)
-- [Contract Agreement](doc/Contract_Agreement.md)
-- [Cost Estimation on AWS Hosting](doc/Cost_Estimation_on_AWS_Hosting.md)
-- [Design System](doc/Design_System.md)
-- [Project Plan](doc/Project_Plan.md)
-- [Requirements Document](doc/Requirements_Document.md)
-- [Statement of Work (SOW)](doc/Statement_of_Work_(SOW).md)
-- [Design Document](doc/Design_Document.md)
-- [Project Closure Document](doc/Project_Closure_Document.md)
-
-## Technologies Used
-- Spring MVC
-- JSP
-- Hibernate
-- PostgreSQL
-- Spring Security
-- Bootstrap
-- Webpack
+---
 
 ## Getting Started
 
 ### Prerequisites
-- JDK 11 or higher
-- Apache Maven
-- PostgreSQL
-- Node.js and npm
+* **Java Development Kit (JDK) 17 or higher**
+* **Apache Maven 3.6+**
+* **Node.js 18+ and npm**
 
-### Setup
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/e-Dastavej.git
-    cd e-Dastavej
-    ```
+---
 
-2. Create a PostgreSQL database:
-    ```sql
-    CREATE DATABASE file_management;
-    ```
+### Step 1: Run the Backend Service
+The backend creates and updates the SQLite database `file_metadata.db` locally and listens for incoming REST calls.
+```bash
+cd backend
+mvn spring-boot:run
+```
+The local service runs on `http://localhost:8080`.
 
-3. Update `application.properties` with your database configurations:
-    ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/file_management
-    spring.datasource.username=edastavej
-    spring.datasource.password=edastavej
-    spring.jpa.hibernate.ddl-auto=update
-    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-    spring.jpa.show-sql=true
-    ```
+---
 
-4. Install frontend dependencies and build:
-    ```bash
-    npm install
-    npx webpack --config webpack.config.js
-    ```
+### Step 2: Launch the Tauri Desktop App
+The Tauri desktop window compiles the Rust application wrapper and serves the React frontend interface.
+```bash
+cd frontend
+npm install
+npm run tauri dev
+```
+A native application window will display the React Dashboard interface.
 
-5. Build the project:
-    ```bash
-    mvn clean install
-    ```
+---
 
-6. Deploy the WAR file to your favorite servlet container (e.g., Tomcat).
+## Features
+- **Auto-Deduplication:** Computes SHA-256 hashes of files before storing to prevent duplicate documents on disk.
+- **Relational Metadata:** Organizes documents by custom categories and subcategories.
+- **Local Access Control:** Simulates role-based access control (Admin, Manager, Staff, Clerk, Public).
+- **Fast Full-Text Search:** Indexes document metadata and contents for fast local queries.
 
-7. Access the application at `http://localhost:8080/e-Dastavej`.
-
-## License
-This project is licensed under the MIT License.
+## Documentation
+- [Architecture Guide](docs/ARCHITECTURE.md)
+- [User Guide](docs/USER_GUIDE.md)
