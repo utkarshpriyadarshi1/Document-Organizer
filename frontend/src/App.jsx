@@ -494,8 +494,11 @@ function App() {
       method: "POST",
       body: formData
     })
-      .then(res => {
-        if (!res.ok) throw new Error("Upload failed");
+      .then(async res => {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || "Upload failed");
+        }
         return res.json();
       })
       .then(() => {

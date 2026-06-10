@@ -102,7 +102,7 @@ public class FileService {
             Optional<FileMetadata> existingFile = fileMetadataRepository.findByHash(hash);
             if (existingFile.isPresent()) {
                 Files.delete(destination); // Remove duplicate
-                return "Duplicate file detected and removed.";
+                throw new IllegalArgumentException("Duplicate file detected: A file with the same content signature already exists in the archive.");
             }
 
             FileMetadata metadata = new FileMetadata(null, filePath, newPath, fileType, year, month, Files.size(source), hash);

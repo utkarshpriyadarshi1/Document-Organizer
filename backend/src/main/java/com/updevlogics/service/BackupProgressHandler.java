@@ -23,4 +23,11 @@ public class BackupProgressHandler extends TextWebSocketHandler {
             } catch (IOException ignored) {}
         }
     }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
+        if (this.session == session) {
+            this.session = null;
+        }
+    }
 }

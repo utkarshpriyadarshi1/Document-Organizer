@@ -38,7 +38,9 @@ public class FileRepository {
         List<Predicate> predicates = new ArrayList<>();
 
         if (query != null && !query.isEmpty()) {
-            predicates.add(cb.like(file.get("fileName"), "%" + query + "%"));
+            Predicate fileNameLike = cb.like(file.get("fileName"), "%" + query + "%");
+            Predicate descriptionLike = cb.like(file.get("description"), "%" + query + "%");
+            predicates.add(cb.or(fileNameLike, descriptionLike));
         }
 
         if (fileType != null && !fileType.isEmpty()) {

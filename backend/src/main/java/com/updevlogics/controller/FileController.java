@@ -32,7 +32,7 @@ public class FileController {
         try {
             fileService.saveFile(file, description, category, subCategory);
             return ResponseEntity.ok(Map.of("message", "File uploaded successfully!"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("message", "File upload failed: " + e.getMessage()));
         }
     }
