@@ -41,6 +41,6 @@ This document tracks the current features of **e-Dastavej Document Management Sy
 
 | Script Tool | Target Environment | CLI Actions | Status |
 | :--- | :--- | :--- | :--- |
-| **run.bat (Option 1)** | **Development** | Concurrent launcher opening backend (Spring Boot run) and frontend (Tauri dev) in separate CMD windows | **In Progress** |
-| **run.bat (Option 2)** | **Production** | Runs Maven package compiler and builds Tauri release wrapper outputting a native `.exe` installer | **In Progress** |
-| **run.bat (Option 3)** | **Clean Up** | Clears out Java target files and Rust compiler target/build directories to free disk space | **In Progress** |
+| **dev.bat** | **Development** | Concurrent launcher opening backend (Spring Boot run) and frontend (Tauri dev) in separate CMD windows | **Completed** |
+| **build.bat** | **Production** | Runs Maven package compiler and builds Tauri release wrapper outputting native `.msi` and `.exe` installers | **Completed** |
+| **clean.bat** | **Clean Up** | Clears out Java target files and Rust compiler target/build directories to free disk space | **Completed** |

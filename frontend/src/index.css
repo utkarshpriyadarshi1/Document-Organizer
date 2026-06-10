@@ -9,4 +9,241 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Modal Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Light mode overrides */
+.light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Fix text gradients in light mode */
+.light .bg-clip-text {
+  background-image: linear-gradient(to right, #0f172a, #3b82f6) !important;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+/* Fix specific gradient bounds */
+.light .from-white {
+  --tw-gradient-from: #0f172a !important;
+  --tw-gradient-to: rgba(15, 23, 42, 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+.light .to-slate-400 {
+  --tw-gradient-to: #334155 !important;
+}
+
+.light .bg-slate-950 {
+  background-color: #f8fafc !important;
+}
+
+.light .bg-slate-955 {
+  background-color: #ffffff !important;
+}
+
+.light .bg-slate-950\/60 {
+  background-color: rgba(248, 250, 252, 0.6) !important;
+}
+
+.light .bg-slate-950\/40 {
+  background-color: rgba(248, 250, 252, 0.4) !important;
+}
+
+.light .bg-slate-950\/20 {
+  background-color: rgba(248, 250, 252, 0.2) !important;
+}
+
+.light .bg-slate-900 {
+  background-color: #ffffff !important;
+}
+
+.light .bg-slate-900\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.light .bg-slate-900\/90 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.light .bg-slate-900\/70 {
+  background-color: rgba(241, 245, 249, 0.7) !important;
+}
+
+.light .bg-slate-900\/50 {
+  background-color: rgba(241, 245, 249, 0.5) !important;
+}
+
+.light .bg-slate-900\/40 {
+  background-color: rgba(241, 245, 249, 0.4) !important;
+}
+
+.light .bg-slate-900\/30 {
+  background-color: rgba(241, 245, 249, 0.3) !important;
+}
+
+.light .bg-slate-850 {
+  background-color: #f1f5f9 !important;
+}
+
+.light .bg-slate-850\/40 {
+  background-color: rgba(241, 245, 249, 0.4) !important;
+}
+
+.light .bg-slate-955\/40 {
+  background-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.light .bg-slate-955\/30 {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.light .text-slate-100 {
+  color: #0f172a !important;
+}
+
+.light .text-slate-200 {
+  color: #1e293b !important;
+}
+
+.light .text-slate-300 {
+  color: #334155 !important;
+}
+
+.light .text-slate-350 {
+  color: #334155 !important;
+}
+
+.light .text-slate-355 {
+  color: #334155 !important;
+}
+
+.light .text-slate-400 {
+  color: #475569 !important;
+}
+
+.light .text-slate-450 {
+  color: #475569 !important;
+}
+
+.light .text-slate-455 {
+  color: #475569 !important;
+}
+
+.light .text-slate-500 {
+  color: #64748b !important;
+}
+
+.light .text-slate-550 {
+  color: #64748b !important;
+}
+
+.light .text-slate-600 {
+  color: #64748b !important;
+}
+
+.light .border-slate-800 {
+  border-color: #cbd5e1 !important;
+}
+
+.light .border-slate-800\/80 {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+.light .border-slate-800\/60 {
+  border-color: rgba(203, 213, 225, 0.6) !important;
+}
+
+.light .border-slate-850 {
+  border-color: #cbd5e1 !important;
+}
+
+.light .border-slate-850\/40 {
+  border-color: rgba(203, 213, 225, 0.4) !important;
+}
+
+.light .border-slate-900 {
+  border-color: #e2e8f0 !important;
+}
+
+.light .border-slate-750 {
+  border-color: #cbd5e1 !important;
+}
+
+.light .hover\:bg-slate-800\/50:hover {
+  background-color: rgba(241, 245, 249, 0.7) !important;
+}
+
+.light .hover\:bg-slate-850\/40:hover {
+  background-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+.light .hover\:bg-slate-850\/50:hover {
+  background-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+.light .hover\:bg-slate-900\/40:hover {
+  background-color: rgba(241, 245, 249, 0.5) !important;
+}
+
+.light .hover\:text-slate-200:hover {
+  color: #0f172a !important;
+}
+
+.light .hover\:text-slate-300:hover {
+  color: #1e293b !important;
+}
+
+.light select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.4);
+}
+
+/* Standard Premium UI enhancements */
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
+  border-color: #6366f1 !important;
+  outline: none !important;
+}
+.light input:focus, .light select:focus, .light textarea:focus {
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25) !important;
+  border-color: #4f46e5 !important;
+  outline: none !important;
 }

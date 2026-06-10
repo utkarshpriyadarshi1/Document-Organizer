@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "e-Dastavej",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -15,7 +15,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "Office",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -39,9 +39,9 @@
       "shortDescription": "",
       "targets": "all",
       "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "",
-        "timestampUrl": ""
+        "certificateThumbprint": "7E7E7BDA9E7858591379E4936739561035A8249A",
+        "digestAlgorithm": "sha256",
+        "timestampUrl": "http://timestamp.digicert.com"
       }
     },
     "security": {
