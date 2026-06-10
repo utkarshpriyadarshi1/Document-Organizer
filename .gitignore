@@ -10,3 +10,5 @@
 /.vscode
 /frontend/node_modules
 /.vscode
+/backend/target
+/backend/target
