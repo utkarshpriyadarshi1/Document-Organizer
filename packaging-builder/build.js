@@ -110,8 +110,8 @@ if (fs.existsSync(cargoTomlDir)) {
 console.log('Installing frontend dependencies...');
 runCommand('npm', ['install'], frontendDir);
 
-// Build Tauri app (limiting parallel compilation threads to 2 to avoid memory exhaustions)
-const extraEnv = { CARGO_BUILD_JOBS: '2' };
+// Build Tauri app (limiting parallel compilation threads to 2 and increasing compiler thread stack size to avoid crashes)
+const extraEnv = { CARGO_BUILD_JOBS: '2', RUST_MIN_STACK: '16777216' };
 console.log('Building Tauri release application...');
 runCommand('npm', ['run', 'tauri', 'build'], frontendDir, extraEnv);
 
