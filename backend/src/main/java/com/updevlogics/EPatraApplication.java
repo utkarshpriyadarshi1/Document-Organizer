@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class EPatraApplication {
     static {
         String homeDir = System.getProperty("user.home");
         java.io.File appFolder = new java.io.File(homeDir, ".e-patra");
@@ -29,6 +29,6 @@ public class Application {
             }
         }
 
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(EPatraApplication.class, args);
     }
 }

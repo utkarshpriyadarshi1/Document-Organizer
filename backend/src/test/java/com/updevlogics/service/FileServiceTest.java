@@ -1,6 +1,6 @@
 package com.updevlogics.service;
 
-import com.updevlogics.Application;
+import com.updevlogics.EPatraApplication;
 import com.updevlogics.model.FileInfo;
 import com.updevlogics.model.FileMetadata;
 import com.updevlogics.repository.FileMetadataRepository;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = EPatraApplication.class)
 public class FileServiceTest {
 
     @Autowired
