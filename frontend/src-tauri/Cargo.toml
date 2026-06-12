@@ -1,6 +1,6 @@
 [package]
 name = "app"
-version = "1.0.11"
+version = "1.0.20"
 description = "A Tauri App"
 authors = ["Sanchaya Developers"]
 edition = "2021"
@@ -21,6 +21,14 @@ custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
 panic = "abort"
-codegen-units = 16
+codegen-units = 1
 lto = false
+opt-level = "s"
+
+[profile.release.build-override]
+codegen-units = 16
+opt-level = 0
+
+[profile.release.package."*"]
+codegen-units = 16
 opt-level = 0

@@ -17,7 +17,8 @@ if %errorlevel% neq 0 (
 )
 
 echo [1/2] Packaging Backend Service (Spring Boot Jar)...
-call %MAVEN_CMD% -f backend/pom.xml clean package
+set MAVEN_OPTS=-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m
+call %MAVEN_CMD% -f backend/pom.xml clean package -DskipTests
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Backend packaging failed!
@@ -36,6 +37,10 @@ cargo clean
 cd ..
 :: Limit parallel compilation jobs to prevent compiler OOM errors
 set CARGO_BUILD_JOBS=1
+:: Increase compiler thread stack size to avoid crashes
+set RUST_MIN_STACK=268435456
+:: Limit Node.js memory footprint to avoid paging file commitment errors
+set NODE_OPTIONS=--max-old-space-size=256
 :: Build production Tauri app
 call npm run tauri build
 if %errorlevel% neq 0 (

@@ -13,12 +13,13 @@ function commandExists(cmd) {
 }
 
 // Helper to execute a command with inherited stdio
-function runCommand(command, args, cwd) {
+function runCommand(command, args, cwd, env = {}) {
   console.log(`> Running: ${command} ${args.join(' ')} (in ${cwd})`);
   const result = spawnSync(command, args, {
     cwd,
     stdio: 'inherit',
-    shell: true
+    shell: true,
+    env: { ...process.env, ...env }
   });
   return result.status === 0;
 }
@@ -64,7 +65,7 @@ if (os.platform() === 'win32') {
 // 2. Clean Backend Target
 if (mavenFound) {
   console.log('\nCleaning backend target directory...');
-  runCommand(mavenCmd, ['-f', path.join('backend', 'pom.xml'), 'clean'], rootDir);
+  runCommand(mavenCmd, ['-f', path.join('backend', 'pom.xml'), 'clean'], rootDir, { MAVEN_OPTS: '-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m' });
 } else {
   console.warn('\n[WARNING] Maven command not found. Skipping backend clean...');
 }

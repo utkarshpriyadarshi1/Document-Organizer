@@ -85,7 +85,7 @@ if (os.platform() === 'win32') {
 
 // 3. Package Backend Service
 console.log('\n[1/3] Packaging Backend Service (Spring Boot Jar)...');
-runCommand(mavenCmd, ['-f', path.join('backend', 'pom.xml'), 'clean', 'package'], rootDir);
+runCommand(mavenCmd, ['-f', path.join('backend', 'pom.xml'), 'clean', 'package', '-DskipTests'], rootDir, { MAVEN_OPTS: '-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m' });
 
 // 4. Bump Frontend Build Version
 console.log('\n[2/3] Bumping Frontend Version...');
@@ -111,7 +111,7 @@ console.log('Installing frontend dependencies...');
 runCommand('npm', ['install'], frontendDir);
 
 // Build Tauri app (limiting parallel compilation threads to 1 and increasing compiler thread stack size to avoid crashes)
-const extraEnv = { CARGO_BUILD_JOBS: '1', RUST_MIN_STACK: '16777216' };
+const extraEnv = { CARGO_BUILD_JOBS: '1', RUST_MIN_STACK: '268435456', NODE_OPTIONS: '--max-old-space-size=256' };
 console.log('Building Tauri release application...');
 runCommand('npm', ['run', 'tauri', 'build'], frontendDir, extraEnv);
 

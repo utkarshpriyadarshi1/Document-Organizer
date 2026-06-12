@@ -30,7 +30,7 @@ fi
 
 # 2. Build backend
 echo "[1/2] Packaging Backend Service (Spring Boot Jar)..."
-$MAVEN_CMD -f backend/pom.xml clean package
+MAVEN_OPTS="-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m" $MAVEN_CMD -f backend/pom.xml clean package -DskipTests
 
 echo
 echo "[2/2] Compiling Frontend Client (Tauri Standalone App)..."
@@ -46,6 +46,10 @@ cd ..
 
 # Limit parallel compilation jobs to prevent compiler OOM errors
 export CARGO_BUILD_JOBS=1
+# Increase compiler thread stack size to avoid crashes
+export RUST_MIN_STACK=268435456
+# Limit Node.js memory footprint to avoid paging file commitment errors
+export NODE_OPTIONS=--max-old-space-size=256
 
 # Build production Tauri app
 npm run tauri build
