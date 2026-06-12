@@ -1,6 +1,6 @@
 # Relational Database Schema
 
-e-Patra stores relational metadata index logs inside an embedded SQLite database. This document details the database configuration, schema structures, field attributes, and tables managed by Spring Data JPA.
+Sanchaya stores relational metadata index logs inside an embedded SQLite database. This document details the database configuration, schema structures, field attributes, and tables managed by Spring Data JPA.
 
 ---
 
@@ -8,7 +8,7 @@ e-Patra stores relational metadata index logs inside an embedded SQLite database
 
 - **Database Engine:** SQLite 3
 - **File Name:** `file_metadata.db`
-- **Default Location:** `${user.home}/.e-patra/file_metadata.db`
+- **Default Location:** `${user.home}/.sanchaya/file_metadata.db`
 - **Data Access Layer:** JPA (Hibernate Community Dialect for SQLite)
 - **DDL Mode:** `update` (auto-managed mapping schemas)
 
@@ -53,7 +53,7 @@ Tracks user-defined file taxonomies.
 | Column Name | SQLite Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
 | `id` | `INTEGER` | `PRIMARY KEY AUTOINCREMENT` | Auto-incremented unique ID |
-| `name` | `TEXT` | `NOT NULL` | Unique category label |
+| `name` | `TEXT` | `NOT NULL UNIQUE` | Unique category label |
 
 ### 4. `sub_category`
 Represents child taxonomies associated with a parent category.

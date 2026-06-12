@@ -1,17 +1,17 @@
-# e-Patra - Local-First Cross Platform File Organizer Desktop App
+# Sanchaya - Local-First Document Organizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](#supported-platforms--devices)
 [![Framework: Tauri v1.5](https://img.shields.io/badge/Framework-Tauri%20v1.5-orange.svg)](https://tauri.app/)
 [![Backend: Spring Boot 3](https://img.shields.io/badge/Backend-Spring%20Boot%203-green.svg)](https://spring.io/projects/spring-boot)
 
-e-Patra is a secure, local-first document management system designed to organize, index, and archive local files. It utilizes a hybrid desktop client-server architecture to provide a native app experience while leveraging local system resources.
+Sanchaya is a secure, local-first document management system designed to organize, index, and archive local files. It utilizes a hybrid desktop client-server architecture to provide a native app experience while leveraging local system resources.
 
 ---
 
 ## Supported Platforms & Devices
 
-e-Patra is designed to be highly portable and compatible across a range of desktop platforms and hardware architectures:
+Sanchaya is designed to be highly portable and compatible across a range of desktop platforms and hardware architectures:
 
 * **Supported Operating Systems:**
   * **Windows:** Windows 10 and 11 (x86_64, ARM64)
@@ -25,7 +25,7 @@ e-Patra is designed to be highly portable and compatible across a range of deskt
 
 ## Standalone vs. Web Portal Topology
 
-e-Patra is architected as a **local-first standalone desktop application** to guarantee privacy, performance, and low-latency offline document manipulation. However, its modular architecture makes it flexible:
+Sanchaya is architected as a **local-first standalone desktop application** to guarantee privacy, performance, and low-latency offline document manipulation. However, its modular architecture makes it flexible:
 
 1. **Standalone Desktop Client (Primary):**
    The Tauri client bundles the React SPA and launches a dedicated native OS window. It communicates locally with the embedded JVM background service. The document database (SQLite) and file store reside strictly on the user's hard drive.
@@ -36,7 +36,7 @@ e-Patra is architected as a **local-first standalone desktop application** to gu
 
 ## Architecture Overview
 
-* **Frontend Client (Tauri + React + Vanilla CSS / Tailwind):** A lightweight desktop window rendering a React user interface, compiled via Rust into a native OS wrapper.
+* **Frontend Client (Tauri + React + Vanilla CSS):** A lightweight desktop window rendering a React user interface, compiled via Rust into a native OS wrapper.
 * **Backend Service (Spring Boot 3 + Spring Data JPA + SQLite):** A lightweight JVM-based background service managing file directory structures, metadata indexation, and content deduplication.
 * **Mock Sandbox Mode:** If the frontend is launched without the Java service running, the React app automatically falls back to an interactive mock environment, allowing design iteration and UI validation out-of-the-box.
 
@@ -45,7 +45,7 @@ e-Patra is architected as a **local-first standalone desktop application** to gu
 ## Directory Structure
 
 ```text
-e-Patra/
+Sanchaya/
 ├── backend/                  # Spring Boot 3 & SQLite database project
 │   ├── src/                  # Java source files (controller, service, repository, model)
 │   ├── sql/                  # SQLite database table schema setups
@@ -78,7 +78,7 @@ e-Patra/
 
 ## Prerequisites
 
-To run or build e-Patra locally, ensure you have the following installed:
+To run or build Sanchaya locally, ensure you have the following installed:
 * **Java Development Kit (JDK) 17 or higher**
 * **Apache Maven 3.6+**
 * **Node.js 18+ and npm**
@@ -110,7 +110,7 @@ chmod +x dev.sh
 If you prefer to launch the layers individually:
 
 #### Step 1: Launch the Backend Service
-The backend creates and updates the SQLite database `file_metadata.db` locally in the backend root directory.
+The backend creates and updates the SQLite database `file_metadata.db` locally in the `.sanchaya/` folder in the user's home directory.
 ```bash
 cd backend
 mvn spring-boot:run

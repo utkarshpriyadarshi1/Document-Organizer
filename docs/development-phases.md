@@ -1,6 +1,6 @@
 # Development Phases & Feature Registry
 
-This document tracks the historical development phases, current implementation statuses, and future roadmap directions for the **e-Patra Document Management System**.
+This document tracks the historical development phases, current implementation statuses, and future roadmap directions for the **Sanchaya Document Management System**.
 
 ---
 
@@ -30,7 +30,7 @@ This document tracks the historical development phases, current implementation s
 
 ## Structured Development Roadmap
 
-### Phase 1: Local Ingestion & Indexing (Completed)
+### Phase 1: Local Ingestion & Storage Architecture (Completed)
 - Set up Spring Boot REST services for localhost loopback communication.
 - Implemented file copy streams moving uploads into the organized extension and date paths.
 - Setup SQLite 3 and JPA Hibernate dialect integration.

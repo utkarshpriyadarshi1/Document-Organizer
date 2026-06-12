@@ -1,4 +1,4 @@
--- Default taxonomy template seeds for e-Patra
+-- Default taxonomy template seeds for Sanchaya
 
 -- Insert master categories
 INSERT OR IGNORE INTO category (id, name) VALUES (1, 'Finance');

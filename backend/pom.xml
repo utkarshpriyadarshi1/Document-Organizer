@@ -11,9 +11,9 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.updevlogics</groupId>
-    <artifactId>e-patra</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <groupId>org.sanchaya</groupId>
+    <artifactId>sanchaya</artifactId>
+    <version>1.0.9-SNAPSHOT</version>
 
     <properties>
         <java.version>17</java.version>

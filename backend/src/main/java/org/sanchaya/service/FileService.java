@@ -1,0 +1,139 @@
+package org.sanchaya.service;
+
+import org.sanchaya.model.FileMetadata;
+import org.sanchaya.model.FileInfo;
+import org.sanchaya.repository.FileRepository;
+import org.sanchaya.repository.FileMetadataRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.sanchaya.config.StorageConfig;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class FileService {
+
+    private final FileRepository fileRepository;
+    private final FileMetadataRepository fileMetadataRepository;
+
+    @Autowired
+    public FileService(FileRepository fileRepository, FileMetadataRepository fileMetadataRepository) {
+        this.fileRepository = fileRepository;
+        this.fileMetadataRepository = fileMetadataRepository;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void saveFile(MultipartFile multipartFile, String description, String category, String subCategory) throws IOException {
+        String fileName = multipartFile.getOriginalFilename();
+        Path uploadDir = StorageConfig.getUploadsDir();
+        Files.createDirectories(uploadDir);
+        File file = uploadDir.resolve(fileName).toFile();
+        
+        multipartFile.transferTo(file);
+
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setFileName(fileName);
+        fileInfo.setFilePath(file.getPath());
+        fileInfo.setFileType(multipartFile.getContentType());
+        fileInfo.setFileSize(multipartFile.getSize());
+        fileInfo.setDescription(description);
+        fileInfo.setCategory(category);
+        fileInfo.setSubCategory(subCategory);
+        fileInfo.setUploadDate(new Date());
+
+        fileRepository.saveFile(fileInfo);
+
+        try {
+            storeFile(file.getPath());
+        } catch (Exception e) {
+            // Delete the temporary uploaded file to prevent orphan files on disk
+            if (file.exists()) {
+                file.delete();
+            }
+            throw new RuntimeException("Failed to organize and register file metadata: " + e.getMessage(), e);
+        }
+    }
+
+    public List<FileInfo> getAllFiles() {
+        return fileRepository.getAllFiles();
+    }
+
+    public List<FileInfo> searchFiles(String query, String fileType, String role, Date dateFrom, Date dateTo, String category, String subCategory) {
+        return fileRepository.searchFiles(query, fileType, role, dateFrom, dateTo, category, subCategory);
+    }
+
+    public List<FileInfo> getLast10Files() {
+        return fileRepository.getLast10Files();
+    }
+
+    public String storeFile(String filePath) throws Exception {
+        Path source = Paths.get(filePath);
+        String fileType = Files.probeContentType(source);
+        if (fileType != null && fileType.contains("/")) {
+            fileType = fileType.substring(fileType.indexOf("/") + 1);
+        }
+        if (fileType == null || fileType.isEmpty()) {
+            String name = source.getFileName().toString();
+            int lastDot = name.lastIndexOf('.');
+            fileType = (lastDot > 0) ? name.substring(lastDot + 1).toLowerCase() : "unknown";
+        }
+        String year = String.valueOf(Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getYear());
+        String month = String.format("%02d", Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getMonthValue());
+
+        String newPath = "organized/" + fileType + "/" + year + "/" + month + "/" + source.getFileName();
+        Path destination = Paths.get(StorageConfig.getAppHomePath(), newPath);
+
+        Files.createDirectories(destination.getParent());
+        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+
+        try {
+            String hash = generateFileHash(source);
+            Optional<FileMetadata> existingFile = fileMetadataRepository.findByHash(hash);
+            if (existingFile.isPresent()) {
+                Files.delete(destination); // Remove duplicate
+                throw new IllegalArgumentException("Duplicate file detected: A file with the same content signature already exists in the archive.");
+            }
+
+            FileMetadata metadata = new FileMetadata(null, filePath, newPath, fileType, year, month, Files.size(source), hash);
+            fileMetadataRepository.save(metadata);
+        } catch (Exception e) {
+            // Clean up copied physical file in organized/ folder to prevent stray disk allocations
+            if (Files.exists(destination)) {
+                Files.delete(destination);
+            }
+            throw e;
+        }
+
+        return "File stored at: " + newPath;
+    }
+
+    public List<FileMetadata> getAllMetadata() {
+        return fileMetadataRepository.findAll();
+    }
+
+    public Optional<FileMetadata> getMetadataById(Long id) {
+        return fileMetadataRepository.findById(id);
+    }
+
+    private String generateFileHash(Path path) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] fileBytes = Files.readAllBytes(path);
+        byte[] hash = digest.digest(fileBytes);
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
+    }
+}

@@ -1,6 +1,6 @@
-# Contributing to e-Patra
+# Contributing to Sanchaya
 
-Thank you for your interest in contributing to **e-Patra**! We welcome contributions from developers of all skill levels to help make e-Patra a better secure, local-first document management system.
+Thank you for your interest in contributing to **Sanchaya**! We welcome contributions from developers of all skill levels to help make Sanchaya a better secure, local-first document management system.
 
 Please take a moment to review this document before submitting your contribution.
 

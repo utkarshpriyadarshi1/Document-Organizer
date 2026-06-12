@@ -28,7 +28,7 @@ function runCommand(command, args, cwd, env = {}) {
 }
 
 console.log('===================================================');
-console.log('       e-Patra Cross-Platform Build Runner         ');
+console.log('       Sanchaya Cross-Platform Build Runner        ');
 console.log('===================================================');
 console.log(`Platform: ${os.platform()} (${os.arch()})`);
 console.log(`Workspace Root: ${rootDir}`);
@@ -110,15 +110,15 @@ if (fs.existsSync(cargoTomlDir)) {
 console.log('Installing frontend dependencies...');
 runCommand('npm', ['install'], frontendDir);
 
-// Build Tauri app (limiting parallel compilation threads to 2 and increasing compiler thread stack size to avoid crashes)
-const extraEnv = { CARGO_BUILD_JOBS: '2', RUST_MIN_STACK: '16777216' };
+// Build Tauri app (limiting parallel compilation threads to 1 and increasing compiler thread stack size to avoid crashes)
+const extraEnv = { CARGO_BUILD_JOBS: '1', RUST_MIN_STACK: '16777216' };
 console.log('Building Tauri release application...');
 runCommand('npm', ['run', 'tauri', 'build'], frontendDir, extraEnv);
 
 console.log('\n===================================================');
 console.log('     [SUCCESS] Production build completed!         ');
 console.log('===================================================');
-console.log(`Backend Jar: backend/target/e-patra-1.0-SNAPSHOT.jar`);
+console.log(`Backend Jar: backend/target/sanchaya-1.0-SNAPSHOT.jar`);
 console.log(`Frontend Standalone App: frontend/src-tauri/target/release/`);
 console.log('===================================================\n');
 process.exit(0);

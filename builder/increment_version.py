@@ -6,7 +6,7 @@ import json
 import argparse
 
 def main():
-    parser = argparse.ArgumentParser(description="Automate version bumping across e-Patra workspace files.")
+    parser = argparse.ArgumentParser(description="Automate version bumping across Sanchaya workspace files.")
     parser.add_argument("bump_type", choices=["major", "minor", "patch"], nargs="?", default="patch",
                         help="The part of the version to bump (default: patch)")
     parser.add_argument("--set", dest="new_version", help="Directly set a specific version (e.g., 1.0.6)")
@@ -105,8 +105,8 @@ def main():
         with open(pom_xml_path, "r", encoding="utf-8") as f:
             pom_content = f.read()
             
-        # Match <artifactId>e-patra</artifactId> and the following <version> tag
-        pom_pattern = r"(<artifactId>e-patra</artifactId>\s*<version>)([^<]+)(</version>)"
+        # Match <artifactId>sanchaya</artifactId> and the following <version> tag
+        pom_pattern = r"(<artifactId>sanchaya</artifactId>\s*<version>)([^<]+)(</version>)"
         match = re.search(pom_pattern, pom_content)
         if match:
             old_pom_version = match.group(2)

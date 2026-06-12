@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 echo ===================================================
-echo     Starting e-Patra Development Environment    
+echo     Starting Sanchaya Development Environment   
 echo ===================================================
 echo.
 
@@ -14,10 +14,10 @@ if %errorlevel% neq 0 (
 )
 
 echo [1/2] Launching Backend Service (Spring Boot)...
-start "e-Patra Backend" cmd /k "%MAVEN_CMD% -f backend/pom.xml spring-boot:run"
+start "Sanchaya Backend" cmd /k "%MAVEN_CMD% -f backend/pom.xml spring-boot:run"
 
 echo [2/2] Launching Frontend Client (Tauri / React)...
-start "e-Patra Frontend" cmd /k "cd frontend && npm run tauri dev"
+start "Sanchaya Frontend" cmd /k "cd frontend && npm run tauri dev"
 
 echo.
 echo [SUCCESS] Both development servers have been spawned in separate windows!
@@ -31,8 +31,8 @@ exit /b 0
 set MAVEN_CMD=mvn
 where mvn >nul 2>nul
 if %errorlevel% neq 0 (
-    if exist "C:\Users\utkar\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd" (
-        set MAVEN_CMD="C:\Users\utkar\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd"
+    if exist "%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd" (
+        set MAVEN_CMD="%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd"
     ) else (
         echo [ERROR] Maven was not found in your PATH or local user directory.
         echo Please ensure Java 17+ and Maven are installed.

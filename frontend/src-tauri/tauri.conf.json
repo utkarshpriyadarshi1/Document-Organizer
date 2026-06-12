@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "e-Patra",
-    "version": "1.0.8"
+    "productName": "Sanchaya",
+    "version": "1.0.10"
   },
   "tauri": {
     "allowlist": {
@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.updevlogics.epatra",
+      "identifier": "org.sanchaya",
       "longDescription": "",
       "macOS": {
         "frameworks": [],
@@ -52,7 +52,7 @@
         "fullscreen": false,
         "height": 768,
         "resizable": true,
-        "title": "e-Patra - Document Organizer",
+        "title": "Sanchaya - Document Organizer",
         "width": 1024
       }
     ]

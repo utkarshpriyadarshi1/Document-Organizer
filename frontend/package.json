@@ -1,7 +1,7 @@
 {
-  "name": "e-patra-ui",
+  "name": "sanchaya-ui",
   "private": true,
-  "version": "1.0.8",
+  "version": "1.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",

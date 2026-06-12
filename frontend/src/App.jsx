@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 
 function App() {
   const [preferences, setPreferences] = useState(() => {
-    const saved = localStorage.getItem("epatra_preferences");
+    const saved = localStorage.getItem("sanchaya_preferences");
     return saved ? JSON.parse(saved) : {
       defaultTab: "dashboard",
       autoBackup: false,
       backupInterval: "24",
       dedupStrategy: "sha256",
-      storageRoot: "C:\\Users\\utkar\\Desktop\\Projects\\e-patra\\organized",
-      ingestTmp: "C:\\Users\\utkar\\Desktop\\Projects\\e-patra\\uploads"
+      storageRoot: "C:\\Users\\user\\Documents\\sanchaya\\organized",
+      ingestTmp: "C:\\Users\\user\\Documents\\sanchaya\\uploads"
     };
   });
 
@@ -18,7 +18,7 @@ function App() {
   });
 
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("epatra_theme") || "dark";
+    return localStorage.getItem("sanchaya_theme") || "dark";
   });
 
   const [isPrefOpen, setIsPrefOpen] = useState(false);
@@ -27,7 +27,7 @@ function App() {
 
   const [appLogs, setAppLogs] = useState(() => {
     return [
-      { timestamp: new Date().toISOString(), type: "info", message: "e-Patra Workstation Client initialized successfully." },
+      { timestamp: new Date().toISOString(), type: "info", message: "Sanchaya Workstation Client initialized successfully." },
       { timestamp: new Date().toISOString(), type: "info", message: "Loaded preferences and active theme from local storage." }
     ];
   });
@@ -43,7 +43,7 @@ function App() {
   };
 
   useEffect(() => {
-    localStorage.setItem("epatra_theme", theme);
+    localStorage.setItem("sanchaya_theme", theme);
     if (theme === "light") {
       document.documentElement.classList.add("light");
     } else {
@@ -165,8 +165,8 @@ function App() {
           freeSpace: 120000000000,  // 120 GB
           organizedSize: 3612500,   // ~3.6 MB
           uploadsSize: 1548200,     // ~1.5 MB
-          organizedPath: "C:\\Users\\utkar\\Desktop\\Projects\\e-patra\\organized",
-          uploadsPath: "C:\\Users\\utkar\\Desktop\\Projects\\e-patra\\uploads"
+          organizedPath: "C:\\Users\\user\\Documents\\sanchaya\\organized",
+          uploadsPath: "C:\\Users\\user\\Documents\\sanchaya\\uploads"
         });
         setFileMetadata([
           { id: 1, originalPath: "C:\\Downloads\\report.pdf", storedPath: "organized/pdf/2026/05/annual_report_2026.pdf", fileType: "pdf", year: "2026", month: "05", fileSize: 1048576, hash: "a3f5b9021876cd49b387ea1023a7" },
@@ -620,7 +620,7 @@ function App() {
         {/* Client Window Title */}
         <div className="text-xs font-semibold text-slate-400 tracking-wider flex items-center space-x-2">
           <i className="fa-solid fa-box-archive text-indigo-400 text-[11px]"></i>
-          <span>e-Patra Desktop Workstation Client</span>
+          <span>Sanchaya Desktop Workstation Client</span>
         </div>
 
         {/* Top-Right Controls */}
@@ -680,10 +680,10 @@ function App() {
           <div>
             <div className="flex items-center space-x-3 mb-8">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-500/30 text-white">
-                e
+                S
               </div>
               <div>
-                <h1 className="font-bold text-lg leading-none">e-Patra</h1>
+                <h1 className="font-bold text-lg leading-none">Sanchaya</h1>
                 <span className="text-xs text-slate-500 font-medium tracking-wide">DOCUMENT ORGANIZER</span>
               </div>
             </div>

@@ -1,4 +1,4 @@
--- Schema setup for e-Patra embedded SQLite database file_metadata.db
+-- Schema setup for Sanchaya embedded SQLite database file_metadata.db
 
 -- Table file_info: Stores uploaded document metadata index logs
 CREATE TABLE IF NOT EXISTS file_info (

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 echo "==================================================="
-echo "    Starting e-Patra Development Environment    "
+echo "    Starting Sanchaya Development Environment    "
 echo "==================================================="
 echo
 

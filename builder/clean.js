@@ -24,7 +24,7 @@ function runCommand(command, args, cwd) {
 }
 
 console.log('===================================================');
-console.log('       e-Patra Cross-Platform Clean Workspace      ');
+console.log('       Sanchaya Cross-Platform Clean Workspace     ');
 console.log('===================================================');
 
 // 1. Resolve Maven command

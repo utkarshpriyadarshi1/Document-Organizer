@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "==================================================="
-echo "       Compiling e-Patra Production Build       "
+echo "       Compiling Sanchaya Production Build      "
 echo "==================================================="
 echo
 
@@ -45,7 +45,7 @@ cargo clean
 cd ..
 
 # Limit parallel compilation jobs to prevent compiler OOM errors
-export CARGO_BUILD_JOBS=2
+export CARGO_BUILD_JOBS=1
 
 # Build production Tauri app
 npm run tauri build
@@ -55,6 +55,6 @@ echo
 echo "==================================================="
 echo "     [SUCCESS] Production build completed!         "
 echo "==================================================="
-echo "Backend Jar: backend/target/e-patra-1.0-SNAPSHOT.jar"
+echo "Backend Jar: backend/target/sanchaya-1.0-SNAPSHOT.jar"
 echo "Frontend Standalone App: frontend/src-tauri/target/release/"
 echo

@@ -1,12 +1,12 @@
 # Architecture Overview
 
-This document outlines the architecture, data components, system topologies, storage layouts, and API interfaces for **e-Patra**.
+This document outlines the architecture, data components, system topologies, storage layouts, and API interfaces for **Sanchaya**.
 
 ---
 
 ## High-Level Component Topology
 
-e-Patra is built on a hybrid desktop client-server architecture where both layers run locally on the user workstation:
+Sanchaya is built on a hybrid desktop client-server architecture where both layers run locally on the user workstation:
 
 ```
 ┌───────────────────────────────────────┐
@@ -38,7 +38,7 @@ e-Patra is built on a hybrid desktop client-server architecture where both layer
 
 ## Operating Modes
 
-e-Patra operates in one of two modes based on loopback connectivity:
+Sanchaya operates in one of two modes based on loopback connectivity:
 
 ### 1. Live Local Mode
 - **Condition:** Spring Boot server running on `http://localhost:8080`.
@@ -71,7 +71,7 @@ Before writing any file to disk, the backend executes the following:
 
 ## API Reference Manual
 
-The Tauri fronted communicates with the backend on `localhost:8080` using loopback REST API endpoints and WebSocket channels:
+The Tauri frontend communicates with the backend on `localhost:8080` using loopback REST API endpoints and WebSocket channels:
 
 ### 1. File Management API (`/api/files`)
 

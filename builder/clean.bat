@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 cd /d "%~dp0.."
 
 echo ===================================================
-echo           Cleaning e-Patra Workspace            
+echo           Cleaning Sanchaya Workspace            
 echo ===================================================
 echo.
 
@@ -35,8 +35,8 @@ exit /b 0
 set MAVEN_CMD=mvn
 where mvn >nul 2>nul
 if %errorlevel% neq 0 (
-    if exist "C:\Users\utkar\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd" (
-        set MAVEN_CMD="C:\Users\utkar\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd"
+    if exist "%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd" (
+        set MAVEN_CMD="%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.6-bin\3311e1d4\apache-maven-3.9.6\bin\mvn.cmd"
     ) else (
         echo [ERROR] Maven was not found in your PATH or local user directory.
         echo Please ensure Java 17+ and Maven are installed.
