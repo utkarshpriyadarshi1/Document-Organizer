@@ -17,20 +17,21 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.abspath(os.path.join(script_dir, ".."))
     
+    app_config_path = os.path.join(root_dir, "app.config.json")
     package_json_path = os.path.join(root_dir, "frontend", "package.json")
     tauri_conf_path = os.path.join(root_dir, "frontend", "src-tauri", "tauri.conf.json")
     cargo_toml_path = os.path.join(root_dir, "frontend", "src-tauri", "Cargo.toml")
     pom_xml_path = os.path.join(root_dir, "backend", "pom.xml")
     
-    # 1. Read current version from package.json
-    if not os.path.exists(package_json_path):
-        print(f"[ERROR] Could not find package.json at {package_json_path}")
+    # 1. Read current version from app.config.json
+    if not os.path.exists(app_config_path):
+        print(f"[ERROR] Could not find app.config.json at {app_config_path}")
         sys.exit(1)
         
-    with open(package_json_path, "r", encoding="utf-8") as f:
-        package_json = json.load(f)
+    with open(app_config_path, "r", encoding="utf-8") as f:
+        app_config = json.load(f)
     
-    old_version = package_json.get("version", "1.0.0")
+    old_version = app_config.get("version", "1.0.0")
     
     # 2. Determine new version
     if args.new_version:
@@ -39,7 +40,7 @@ def main():
         # Parse version
         match = re.match(r"^(\d+)\.(\d+)\.(\d+)(.*)$", old_version)
         if not match:
-            print(f"[ERROR] Invalid version format in package.json: '{old_version}'")
+            print(f"[ERROR] Invalid version format in app.config.json: '{old_version}'")
             sys.exit(1)
             
         major, minor, patch, suffix = match.groups()
@@ -59,12 +60,22 @@ def main():
         
     print(f"Bumping version: {old_version} -> {new_version}")
     
-    # 3. Update package.json
-    package_json["version"] = new_version
-    with open(package_json_path, "w", encoding="utf-8") as f:
-        json.dump(package_json, f, indent=2)
+    # 3. Update app.config.json
+    app_config["version"] = new_version
+    with open(app_config_path, "w", encoding="utf-8") as f:
+        json.dump(app_config, f, indent=2)
         f.write("\n")
-    print(f"Updated {os.path.relpath(package_json_path, root_dir)}")
+    print(f"Updated {os.path.relpath(app_config_path, root_dir)}")
+    
+    # 3.5. Update package.json
+    if os.path.exists(package_json_path):
+        with open(package_json_path, "r", encoding="utf-8") as f:
+            package_json = json.load(f)
+        package_json["version"] = new_version
+        with open(package_json_path, "w", encoding="utf-8") as f:
+            json.dump(package_json, f, indent=2)
+            f.write("\n")
+        print(f"Updated {os.path.relpath(package_json_path, root_dir)}")
     
     # 4. Update tauri.conf.json
     if os.path.exists(tauri_conf_path):

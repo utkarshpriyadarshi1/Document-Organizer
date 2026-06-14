@@ -85,15 +85,60 @@ public class FileController {
         
         long organizedSize = getFolderSize(organizedDir);
         long uploadsSize = getFolderSize(uploadsDir);
+        int uploadsCount = getFolderFileCount(uploadsDir);
         
         return ResponseEntity.ok(Map.of(
             "totalSpace", totalSpace,
             "freeSpace", freeSpace,
             "organizedSize", organizedSize,
             "uploadsSize", uploadsSize,
+            "uploadsCount", uploadsCount,
             "organizedPath", organizedDir.getAbsolutePath(),
             "uploadsPath", uploadsDir.getAbsolutePath()
         ));
+    }
+
+    @PostMapping("/clear-cache")
+    public ResponseEntity<?> clearCache() {
+        File uploadsDir = StorageConfig.getUploadsDir().toFile();
+        int deletedCount = deleteFolderContents(uploadsDir);
+        return ResponseEntity.ok(Map.of(
+            "message", "Temporary cache cleared successfully!",
+            "deletedCount", deletedCount
+        ));
+    }
+
+    private int deleteFolderContents(File folder) {
+        if (!folder.exists() || !folder.isDirectory()) return 0;
+        File[] files = folder.listFiles();
+        if (files == null) return 0;
+        int count = 0;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                count += deleteFolderContents(file);
+                file.delete();
+            } else {
+                if (file.delete()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private int getFolderFileCount(File folder) {
+        if (!folder.exists() || !folder.isDirectory()) return 0;
+        File[] files = folder.listFiles();
+        if (files == null) return 0;
+        int count = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                count++;
+            } else {
+                count += getFolderFileCount(file);
+            }
+        }
+        return count;
     }
 
     @PostMapping("/metadata/{id}/open-location")

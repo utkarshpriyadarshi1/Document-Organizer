@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 cd /d "%~dp0.."
 
 echo ===================================================
-echo           Cleaning Sanchaya Workspace            
+echo           Cleaning e-Patra Workspace            
 echo ===================================================
 echo.
 

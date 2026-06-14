@@ -28,9 +28,11 @@ if %errorlevel% neq 0 (
 
 echo.
 echo [2/2] Compiling Frontend Client (Tauri Standalone App)...
-cd frontend
 echo Bumping build version...
-call node bump-version.cjs
+call python builder\increment_version.py patch
+echo Copying help documentation...
+xcopy /Y /S /I docs\help frontend\public\help
+cd frontend
 echo Cleaning Rust compile cache to prevent file locking issues...
 cd src-tauri
 cargo clean

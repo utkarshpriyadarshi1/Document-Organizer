@@ -34,11 +34,14 @@ MAVEN_OPTS="-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m" $MAVEN_CMD -f ba
 
 echo
 echo "[2/2] Compiling Frontend Client (Tauri Standalone App)..."
-cd frontend
-
 echo "Bumping build version..."
-node bump-version.cjs
+python3 builder/increment_version.py patch || python builder/increment_version.py patch
 
+echo "Copying help documentation..."
+mkdir -p frontend/public/help
+cp -R docs/help/* frontend/public/help/
+
+cd frontend
 echo "Cleaning Rust compile cache to prevent file locking issues..."
 cd src-tauri
 cargo clean

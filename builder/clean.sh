@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "==================================================="
-echo "          Cleaning Sanchaya Workspace           "
+echo "          Cleaning e-Patra Workspace           "
 echo "==================================================="
 echo
 

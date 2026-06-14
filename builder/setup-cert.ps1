@@ -13,13 +13,24 @@ if (-not (Test-Path $certsDir)) {
     Write-Host "Created certs directory: $certsDir"
 }
 
-# 2. Check if certificate already exists in My store
-Write-Host "Searching for existing Sanchaya Code Signing certificate..."
-$cert = Get-ChildItem -Path "Cert:\CurrentUser\My" | Where-Object { $_.Subject -eq "CN=Sanchaya Code Signing" } | Select-Object -First 1
+# 2. Load configuration and determine certificate subject
+$configPath = Join-Path (Get-Location) "app.config.json"
+$appName = "e-Patra"
+if (Test-Path $configPath) {
+    $config = Get-Content -Raw -Path $configPath | ConvertFrom-Json
+    if ($null -ne $config.appName) {
+        $appName = $config.appName
+    }
+}
+$subject = "CN=$appName Code Signing"
+$friendlyName = "$appName Developer Cert"
+
+Write-Host "Searching for existing $appName Code Signing certificate..."
+$cert = Get-ChildItem -Path "Cert:\CurrentUser\My" | Where-Object { $_.Subject -eq $subject } | Select-Object -First 1
 
 if ($null -eq $cert) {
     Write-Host "No existing certificate found. Generating a new self-signed Code Signing certificate..."
-    $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=Sanchaya Code Signing" -KeyUsage DigitalSignature -FriendlyName "Sanchaya Developer Cert" -CertStoreLocation "Cert:\CurrentUser\My"
+    $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject $subject -KeyUsage DigitalSignature -FriendlyName $friendlyName -CertStoreLocation "Cert:\CurrentUser\My"
     Write-Host "Successfully generated certificate with Thumbprint: $($cert.Thumbprint)"
 } else {
     Write-Host "Found existing certificate with Thumbprint: $($cert.Thumbprint)"
@@ -64,4 +75,4 @@ if (Test-Path $tauriConfPath) {
     Write-Warning "tauri.conf.json not found at $tauriConfPath. Skipping JSON auto-update."
 }
 
-Write-Host "Sanchaya certificate configuration completed successfully!"
+Write-Host "$appName certificate configuration completed successfully!"

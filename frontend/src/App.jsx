@@ -1,15 +1,277 @@
 import React, { useState, useEffect } from "react";
+import appConfig from "../../app.config.json";
+
+const translations = {
+  en: {
+    dashboard: "Workstation Monitor",
+    explorer: "Workstation Explorer",
+    search: "Search Index",
+    upload: "Ingest Document",
+    categories: "Category Master",
+    backup: "System Backup",
+    localWorkstation: "Local Workstation",
+    connectedPort: "Connected (Port 8080)",
+    disconnectedMock: "Disconnected (Mock Mode)",
+    localBackend: "Local Backend",
+    monitorHeading: "Workstation Monitor",
+    monitorSub: "Real-time telemetry of your local document database and physical storage partitions.",
+    storageUsed: "USED",
+    storageFree: "FREE",
+    storageUtilization: "UTILIZATION",
+    storageDirSizing: "Workspace Directory Sizing",
+    organizedFiles: "Organized Files",
+    tempIngests: "Temporary Ingests",
+    indexingMsg: "Files are indexed in a local-first portable registry.",
+    diagnostics: "Engine Diagnostics",
+    dbSystem: "DB System",
+    sqliteDb: "SQLite 3 (Local File)",
+    dedupCheck: "Deduplication Check",
+    dedupActive: "ACTIVE (SHA-256)",
+    dedupDisabled: "DISABLED",
+    workstationHost: "Workstation Host",
+    jvmRuntime: "JVM Runtime",
+    indexSize: "Index Size: {count} records",
+    secureLoopback: "SECURE LOOPBACK",
+    recentChanges: "Recent Workstation Document Changes",
+    noIndexedDoc: "No indexed documents found. Use the Ingest Document tab to add files.",
+    tableName: "File Name",
+    tableType: "Type",
+    tableSize: "Size",
+    tableCategory: "Category",
+    tableSubcategory: "Subcategory",
+    tableUploadDate: "Upload Date",
+    explorerHeading: "Workstation Explorer",
+    explorerSub: "Browse the physically organized folder structure of the workstation on your disk.",
+    localMetadata: "Local Resource Metadata",
+    storedPath: "Stored Path (Relative)",
+    originalPath: "Original Path",
+    fileSizing: "File Sizing",
+    formatExt: "Format Extension",
+    dedupSig: "Deduplication Signature (SHA-256)",
+    btnOpenLocation: "Open Location",
+    btnRunFile: "Run Local File",
+    selectFolderMsg: "Select an organized node from the directory tree to inspect workstation resource mappings.",
+    emptyFolderMsg: "No physically organized files indexed yet. Ingest files to generate disk structure.",
+    searchHeading: "Search Document Index",
+    searchSub: "Queries the local SQLite database for matching metadata and index text.",
+    searchPlaceholder: "Search filenames or contents...",
+    allCategories: "All Categories",
+    allSubcategories: "All Subcategories",
+    allTypes: "All Types",
+    pdfDocs: "PDF Documents",
+    pngImages: "PNG Images",
+    jpgImages: "JPEG Images",
+    wordFiles: "Word Files",
+    description: "Description",
+    btnOpenFile: "Open File",
+    noMatchingDocs: "No matching indexed documents found.",
+    ingestHeading: "Ingest New Document",
+    ingestSub: "Files are copied into the local store and hashed automatically for integrity checking.",
+    selectFileLabel: "Select File",
+    dragDropMsg: "Drag & drop files or click to browse",
+    supportFormats: "Supports PDFs, Images, Word, and Excel",
+    categoryLabel: "Category",
+    selectCategory: "Select Category",
+    subcategoryLabel: "Subcategory",
+    selectSubcategory: "Select Subcategory",
+    descriptionLabel: "Description",
+    descPlaceholder: "Provide keywords or brief summary for search index...",
+    btnIndexStore: "Index and Store File",
+    categoryMasterHeading: "Category & Subcategory Master",
+    categoryMasterSub: "Manage the classifications used to index files in the system database.",
+    createNewCat: "Create New Category",
+    catNamePlaceholder: "Category Name (e.g. Engineering)",
+    btnCreate: "Create",
+    categoryRegistry: "Category Registry",
+    noCatFound: "No categories found in the registry.",
+    useFormInit: "Use the \"Create New Category\" form above to initialize classifications.",
+    subcategories: "Subcategories",
+    noSubDef: "No subcategories defined",
+    newSubPlaceholder: "New subcategory...",
+    btnAdd: "Add",
+    btnRename: "Rename",
+    btnDelete: "Delete",
+    backupHeading: "System Backup & Sync",
+    backupSub: "Pack document directories and SQLite schema states into compressed directories.",
+    coldBackup: "Workstation Cold Backup",
+    coldBackupSub: "Copies all documents in organized/ and records a DB sync point.",
+    btnStartBackup: "Start Full Backup",
+    backingUp: "Backing up...",
+    websocketTunnel: "WebSocket log sync telemetry stream",
+    backupHistory: "Archived Sync Registry",
+    noBackupHistory: "No system backup records in local registry.",
+    backupCompleted: "Backup completed: {msg}",
+    prefTitle: "Workstation Preferences",
+    prefLandingTab: "Default Landing Tab",
+    prefDeduplication: "Deduplication Check",
+    prefEnableDedup: "Enable SHA-256 Hashing & Deduplication",
+    prefStoragePaths: "Physical Storage Paths",
+    prefOrganizedRoot: "ORGANIZED ROOT",
+    prefIngestTmp: "INGEST TMP FOLDER",
+    prefAutoBackup: "Auto-Backup",
+    prefBackupInterval: "Backup Interval",
+    prefBtnCancel: "Cancel",
+    prefBtnSave: "Save Changes",
+    cacheHeading: "Application Cache Statistics",
+    cacheSizeLabel: "Cache Sizing on Disk",
+    cacheCountLabel: "Temporary File Items",
+    btnClearCache: "Clear Cache",
+    cacheClearedLog: "Purged temporary uploads folder files.",
+    helpTitle: "Documentation & Help",
+    helpBtnDismiss: "Dismiss",
+    githubReportBtn: "Report Issue on GitHub",
+    logsTitle: "Application Execution Logs",
+    logsClear: "Clear Logs",
+    logsCopy: "Copy to Clipboard",
+    logsDismiss: "Dismiss"
+  },
+  hi: {
+    dashboard: "कार्यस्थान मॉनिटर",
+    explorer: "कार्यस्थान एक्सप्लोरर",
+    search: "खोज अनुक्रमणिका",
+    upload: "दस्तावेज़ जोड़ें",
+    categories: "श्रेणी सूची",
+    backup: "सिस्टम बैकअप",
+    localWorkstation: "स्थानीय कार्यस्थान",
+    connectedPort: "कनेक्टेड (पोर्ट 8080)",
+    disconnectedMock: "डिसकनेक्टेड (मॉक मोड)",
+    localBackend: "स्थानीय बैकएंड",
+    monitorHeading: "कार्यस्थान मॉनिटर",
+    monitorSub: "आपके स्थानीय दस्तावेज़ डेटाबेस और भौतिक भंडारण विभाजनों की वास्तविक समय टेलीमेट्री।",
+    storageUsed: "उपयोग किया गया",
+    storageFree: "खाली स्थान",
+    storageUtilization: "उपयोग दर",
+    storageDirSizing: "कार्यस्थान निर्देशिका का आकार",
+    organizedFiles: "व्यवस्थित फाइलें",
+    tempIngests: "अस्थायी दस्तावेज",
+    indexingMsg: "फाइलें एक स्थानीय-प्रथम पोर्टेबल रजिस्ट्री में अनुक्रमित की जाती हैं।",
+    diagnostics: "इंजन निदान",
+    dbSystem: "डेटाबेस सिस्टम",
+    sqliteDb: "SQLite 3 (स्थानीय फाइल)",
+    dedupCheck: "डीडुप्लीकेशन जाँच",
+    dedupActive: "सक्रिय (SHA-256)",
+    dedupDisabled: "निष्क्रिय",
+    workstationHost: "कार्यस्थान होस्ट",
+    jvmRuntime: "JVM रनटाइम",
+    indexSize: "अनुक्रमणिका आकार: {count} रिकॉर्ड",
+    secureLoopback: "सुरक्षित लूपबैक",
+    recentChanges: "हाल के कार्यस्थान दस्तावेज़ परिवर्तन",
+    noIndexedDoc: "कोई अनुक्रमित दस्तावेज़ नहीं मिला। फ़ाइलें जोड़ने के लिए दस्तावेज़ जोड़ें टैब का उपयोग करें।",
+    tableName: "फ़ाइल का नाम",
+    tableType: "प्रकार",
+    tableSize: "आकार",
+    tableCategory: "श्रेणी",
+    tableSubcategory: "उपश्रेणी",
+    tableUploadDate: "अपलोड की तारीख",
+    explorerHeading: "कार्यस्थान एक्सप्लोरर",
+    explorerSub: "अपने डिस्क पर कार्यस्थान की व्यवस्थित फ़ोल्डर संरचना ब्राउज़ करें।",
+    localMetadata: "स्थानीय संसाधन मेटाडेटा",
+    storedPath: "संग्रहीत पथ (सापेक्ष)",
+    originalPath: "मूल पथ",
+    fileSizing: "फ़ाइल का आकार",
+    formatExt: "प्रारूप एक्सटेंशन",
+    dedupSig: "डीडुप्लीकेशन हस्ताक्षर (SHA-256)",
+    btnOpenLocation: "स्थान खोलें",
+    btnRunFile: "स्थानीय फ़ाइल चलाएँ",
+    selectFolderMsg: "कार्यस्थान संसाधन मैपिंग का निरीक्षण करने के लिए निर्देशिका ट्री से एक व्यवस्थित नोड चुनें।",
+    emptyFolderMsg: "अभी तक कोई व्यवस्थित फाइलें अनुक्रमित नहीं हैं। डिस्क संरचना उत्पन्न करने के लिए फाइलें जोड़ें।",
+    searchHeading: "दस्तावेज़ अनुक्रमणिका खोजें",
+    searchSub: "मिलान मेटाडेटा और अनुक्रमणिका पाठ के लिए स्थानीय SQLite डेटाबेस से खोज करता है।",
+    searchPlaceholder: "फ़ाइल नाम या सामग्री खोजें...",
+    allCategories: "सभी श्रेणियाँ",
+    allSubcategories: "सभी उपश्रेणियाँ",
+    allTypes: "सभी प्रकार",
+    pdfDocs: "पीडीएफ दस्तावेज़",
+    pngImages: "पीएनजी छवियां",
+    jpgImages: "जेपीईजी छवियां",
+    wordFiles: "वर्ड फाइलें",
+    description: "विवरण",
+    btnOpenFile: "फ़ाइल खोलें",
+    noMatchingDocs: "कोई मिलान अनुक्रमित दस्तावेज़ नहीं मिला।",
+    ingestHeading: "नया दस्तावेज़ जोड़ें",
+    ingestSub: "सत्यता जाँच के लिए फ़ाइलें स्थानीय स्टोर में कॉपी की जाती हैं और स्वचालित रूप से हैश की जाती हैं।",
+    selectFileLabel: "फ़ाइल चुनें",
+    dragDropMsg: "फ़ाइलें खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें",
+    supportFormats: "पीडीएफ, छवियां, वर्ड और एक्सेल का समर्थन करता है",
+    categoryLabel: "श्रेणी",
+    selectCategory: "श्रेणी चुनें",
+    subcategoryLabel: "उपश्रेणी",
+    selectSubcategory: "उपश्रेणी चुनें",
+    descriptionLabel: "विवरण",
+    descPlaceholder: "खोज अनुक्रमणिका के लिए कीवर्ड या संक्षिप्त सारांश प्रदान करें...",
+    btnIndexStore: "अनुक्रमित करें और सुरक्षित करें",
+    categoryMasterHeading: "श्रेणी और उपश्रेणी व्यवस्था",
+    categoryMasterSub: "सिस्टम डेटाबेस में फाइलों को अनुक्रमित करने के लिए उपयोग किए जाने वाले वर्गीकरण प्रबंधित करें।",
+    createNewCat: "नई श्रेणी बनाएँ",
+    catNamePlaceholder: "श्रेणी का नाम (जैसे इंजीनियरिंग)",
+    btnCreate: "बनाएँ",
+    categoryRegistry: "श्रेणी रजिस्ट्री",
+    noCatFound: "रजिस्ट्री में कोई श्रेणियां नहीं मिलीं।",
+    useFormInit: "वर्गीकरण आरंभ करने के लिए ऊपर दिए गए 'नई श्रेणी बनाएँ' फ़ॉर्म का उपयोग करें।",
+    subcategories: "उपश्रेणियाँ",
+    noSubDef: "कोई उपश्रेणी परिभाषित नहीं है",
+    newSubPlaceholder: "नई उपश्रेणी...",
+    btnAdd: "जोड़ें",
+    btnRename: "नाम बदलें",
+    btnDelete: "हटाएं",
+    backupHeading: "सिस्टम बैकअप और सिंक",
+    backupSub: "दस्तावेज़ निर्देशिकाओं और SQLite स्कीमा राज्यों को संपीड़ित निर्देशिकाओं में पैक करें।",
+    coldBackup: "कार्यस्थान कोल्ड बैकअप",
+    coldBackupSub: "व्यवस्थित निर्देशिका की सभी फाइलों को कॉपी करता है और एक डेटाबेस सिंक पॉइंट रिकॉर्ड करता है।",
+    btnStartBackup: "पूर्ण बैकअप शुरू करें",
+    backingUp: "बैकअप हो रहा है...",
+    websocketTunnel: "वेबसॉकेट लॉग सिंक टेलीमेट्री स्ट्रीम",
+    backupHistory: "संग्रहीत सिंक रजिस्ट्री",
+    noBackupHistory: "स्थानीय रजिस्ट्री में कोई सिस्टम बैकअप रिकॉर्ड नहीं है।",
+    backupCompleted: "बैकअप पूरा हुआ: {msg}",
+    prefTitle: "कार्यस्थान प्राथमिकताएं",
+    prefLandingTab: "डिफ़ॉल्ट लैंडिंग टैब",
+    prefDeduplication: "डीडुप्लीकेशन जाँच",
+    prefEnableDedup: "SHA-256 हैशिंग और डीडुप्लीकेशन सक्षम करें",
+    prefStoragePaths: "भौतिक भंडारण पथ",
+    prefOrganizedRoot: "व्यवस्थित रूट",
+    prefIngestTmp: "अस्थायी फ़ोल्डर",
+    prefAutoBackup: "स्वचालित बैकअप",
+    prefBackupInterval: "बैकअप अंतराल",
+    prefBtnCancel: "रद्द करें",
+    prefBtnSave: "परिवर्तन सहेजें",
+    cacheHeading: "एप्लिकेशन कैश सांख्यिकी",
+    cacheSizeLabel: "डिस्क पर कैश का आकार",
+    cacheCountLabel: "अस्थायी फ़ाइलें",
+    btnClearCache: "कैश साफ़ करें",
+    cacheClearedLog: "अस्थायी अपलोड फ़ोल्डर फ़ाइलों को साफ़ कर दिया गया।",
+    helpTitle: "दस्तावेज़ और सहायता",
+    helpBtnDismiss: "खारिज करें",
+    githubReportBtn: "GitHub पर समस्या रिपोर्ट करें",
+    logsTitle: "एप्लिकेशन निष्पादन लॉग",
+    logsClear: "लॉग साफ़ करें",
+    logsCopy: "क्लिपबोर्ड पर कॉपी करें",
+    logsDismiss: "खारिज करें"
+  }
+};
 
 function App() {
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem("epatra_lang") || "en";
+  });
+
+  const t = (key, params = {}) => {
+    let val = translations[lang][key] || translations["en"][key] || key;
+    Object.keys(params).forEach(p => {
+      val = val.replace(`{${p}}`, params[p]);
+    });
+    return val;
+  };
+
   const [preferences, setPreferences] = useState(() => {
-    const saved = localStorage.getItem("sanchaya_preferences");
+    const saved = localStorage.getItem("epatra_preferences");
     return saved ? JSON.parse(saved) : {
       defaultTab: "dashboard",
       autoBackup: false,
       backupInterval: "24",
       dedupStrategy: "sha256",
-      storageRoot: "C:\\Users\\user\\Documents\\sanchaya\\organized",
-      ingestTmp: "C:\\Users\\user\\Documents\\sanchaya\\uploads"
+      storageRoot: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\organized",
+      ingestTmp: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\uploads"
     };
   });
 
@@ -18,7 +280,7 @@ function App() {
   });
 
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("sanchaya_theme") || "dark";
+    return localStorage.getItem("epatra_theme") || "dark";
   });
 
   const [isPrefOpen, setIsPrefOpen] = useState(false);
@@ -27,7 +289,7 @@ function App() {
 
   const [appLogs, setAppLogs] = useState(() => {
     return [
-      { timestamp: new Date().toISOString(), type: "info", message: "Sanchaya Workstation Client initialized successfully." },
+      { timestamp: new Date().toISOString(), type: "info", message: `${appConfig.appName} Workstation Client initialized successfully.` },
       { timestamp: new Date().toISOString(), type: "info", message: "Loaded preferences and active theme from local storage." }
     ];
   });
@@ -35,6 +297,52 @@ function App() {
   const addLog = (type, message) => {
     const timestamp = new Date().toISOString();
     setAppLogs(prev => [{ timestamp, type, message }, ...prev]);
+  };
+
+  useEffect(() => {
+    document.title = `${appConfig.appName} - ${appConfig.subtitle}`;
+  }, []);
+
+  const [activeHelpTab, setActiveHelpTab] = useState("introduction");
+  const [helpContent, setHelpContent] = useState("");
+
+  useEffect(() => {
+    if (isHelpOpen) {
+      fetch(`/help/${activeHelpTab}.md`)
+        .then(res => {
+          if (!res.ok) throw new Error("Help guide not found on server.");
+          return res.text();
+        })
+        .then(text => setHelpContent(text))
+        .catch(err => {
+          setHelpContent(`### e-Patra Help\nFailed to fetch help file.\n\nError: ${err.message}`);
+        });
+    }
+  }, [activeHelpTab, isHelpOpen]);
+
+  const renderMarkdown = (text) => {
+    if (!text) return "";
+    const lines = text.split("\n");
+    return (
+      <div className="space-y-2">
+        {lines.map((line, idx) => {
+          if (line.startsWith("#### ")) {
+            return <h5 key={idx} className="text-xs font-bold text-indigo-400 mt-3 mb-1.5">{line.substring(5)}</h5>;
+          }
+          if (line.startsWith("### ")) {
+            return <h4 key={idx} className="text-sm font-bold text-indigo-400 mt-4 mb-2">{line.substring(4)}</h4>;
+          }
+          if (line.startsWith("## ")) {
+            return <h3 key={idx} className="text-base font-bold text-indigo-400 mt-5 mb-2">{line.substring(3)}</h3>;
+          }
+          if (line.startsWith("- ")) {
+            return <li key={idx} className="ml-4 list-disc text-xs text-slate-350 my-1">{line.substring(2)}</li>;
+          }
+          if (line.trim() === "") return <div key={idx} className="h-2" />;
+          return <p key={idx} className="text-xs text-slate-300 my-1 leading-relaxed">{line}</p>;
+        })}
+      </div>
+    );
   };
 
   const handleTabChange = (tab) => {
@@ -600,6 +908,31 @@ function App() {
       .catch(err => console.error("Error launching file:", err));
   };
 
+  const handleClearCache = () => {
+    addLog("info", "Clearing temporary cache directory...");
+    if (!backendConnected) {
+      setTimeout(() => {
+        setStorageStats(prev => ({
+          ...prev,
+          uploadsSize: 0,
+          uploadsCount: 0
+        }));
+        addLog("success", t("cacheClearedLog") + " (Mock Mode)");
+      }, 1000);
+      return;
+    }
+
+    fetch("http://localhost:8080/api/files/clear-cache", { method: "POST" })
+      .then(res => res.json())
+      .then(data => {
+        addLog("success", `Temporary cache folder cleared. Deleted ${data.deletedCount} files.`);
+        fetchStorageStats();
+      })
+      .catch(err => {
+        addLog("error", `Failed to clear cache: ${err.message}`);
+      });
+  };
+
   // Metrics helper
   const totalSizeMB = files.reduce((acc, f) => acc + f.fileSize, 0) / 1024 / 1024;
   const dirTree = buildDirectoryTree();
@@ -620,21 +953,28 @@ function App() {
         {/* Client Window Title */}
         <div className="text-xs font-semibold text-slate-400 tracking-wider flex items-center space-x-2">
           <i className="fa-solid fa-box-archive text-indigo-400 text-[11px]"></i>
-          <span>Sanchaya Desktop Workstation Client</span>
+          <span>{appConfig.appName} {t("localWorkstation")}</span>
         </div>
 
         {/* Top-Right Controls */}
         <div className="flex items-center space-x-2">
           {/* Host loopback context tag */}
           <div className="text-[10px] bg-slate-955 border border-slate-800/60 text-indigo-400 px-2.5 py-0.5 rounded-full font-bold tracking-wide uppercase">
-            Local Workstation
+            {t("localWorkstation")}
           </div>
+
+          {/* i18n Language Toggle Button */}
+          <button
+            onClick={() => setLang(lang === "en" ? "hi" : "en")}
+            className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
+          >
+            <i className="fa-solid fa-language text-indigo-400 text-[11px]"></i>
+          </button>
 
           {/* Theme Toggle Button */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-            title={theme === "dark" ? "Switch to Day Mode" : "Switch to Night Mode"}
           >
             {theme === "dark" ? (
               <i className="fa-solid fa-sun text-amber-500 text-[11px]"></i>
@@ -647,7 +987,6 @@ function App() {
           <button
             onClick={() => setIsPrefOpen(true)}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-            title="Workstation Preferences"
           >
             <i className="fa-solid fa-sliders text-[11px]"></i>
           </button>
@@ -656,7 +995,6 @@ function App() {
           <button
             onClick={() => setIsHelpOpen(true)}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-            title="Help & Documentation"
           >
             <i className="fa-solid fa-circle-question text-[11px]"></i>
           </button>
@@ -665,7 +1003,6 @@ function App() {
           <button
             onClick={() => setIsLogsOpen(true)}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-            title="Application Live Logs"
           >
             <i className="fa-solid fa-terminal text-[11px]"></i>
           </button>
@@ -680,11 +1017,11 @@ function App() {
           <div>
             <div className="flex items-center space-x-3 mb-8">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-500/30 text-white">
-                S
+                {appConfig.appName.charAt(0)}
               </div>
               <div>
-                <h1 className="font-bold text-lg leading-none">Sanchaya</h1>
-                <span className="text-xs text-slate-500 font-medium tracking-wide">DOCUMENT ORGANIZER</span>
+                <h1 className="font-bold text-lg leading-none">{appConfig.appName}</h1>
+                <span className="text-[10px] text-slate-500 font-medium tracking-wide uppercase">{appConfig.subtitle}</span>
               </div>
             </div>
 
@@ -698,7 +1035,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-chart-line text-sm w-4 text-center"></i>
-                <span className="text-sm">Workstation Monitor</span>
+                <span className="text-sm">{t("dashboard")}</span>
               </button>
               <button
                 onClick={() => handleTabChange("explorer")}
@@ -709,7 +1046,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-folder-tree text-sm w-4 text-center"></i>
-                <span className="text-sm">Workstation Explorer</span>
+                <span className="text-sm">{t("explorer")}</span>
               </button>
               <button
                 onClick={() => handleTabChange("search")}
@@ -720,7 +1057,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-magnifying-glass text-sm w-4 text-center"></i>
-                <span className="text-sm">Search Index</span>
+                <span className="text-sm">{t("search")}</span>
               </button>
               <button
                 onClick={() => handleTabChange("upload")}
@@ -731,7 +1068,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-file-import text-sm w-4 text-center"></i>
-                <span className="text-sm">Ingest Document</span>
+                <span className="text-sm">{t("upload")}</span>
               </button>
               <button
                 onClick={() => handleTabChange("categories")}
@@ -742,7 +1079,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-tags text-sm w-4 text-center"></i>
-                <span className="text-sm">Category Master</span>
+                <span className="text-sm">{t("categories")}</span>
               </button>
 
               <button
@@ -754,7 +1091,7 @@ function App() {
                 }`}
               >
                 <i className="fa-solid fa-database text-sm w-4 text-center"></i>
-                <span className="text-sm">System Backup</span>
+                <span className="text-sm">{t("backup")}</span>
               </button>
             </nav>
           </div>
@@ -765,14 +1102,16 @@ function App() {
               <span className={`w-2.5 h-2.5 rounded-full ${backendConnected ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
               <div className="text-xs">
                 <div className="flex items-center space-x-1.5">
-                  <p className="font-semibold text-slate-350">Local Backend</p>
+                  <p className="font-semibold text-slate-350">{t("localBackend")}</p>
                   {backendConnected && (
-                    <button onClick={syncAllData} className="text-[10px] text-indigo-400 hover:text-indigo-300 cursor-pointer" title="Force Sync Workspace">
+                    <button onClick={syncAllData} className="text-[10px] text-indigo-400 hover:text-indigo-300 cursor-pointer">
                       <i className="fa-solid fa-rotate-right text-xs"></i>
                     </button>
                   )}
                 </div>
-                <p className="text-slate-500 text-[10px]">{backendConnected ? "Connected (Port 8080)" : "Disconnected (Mock Mode)"}</p>
+                <p className="text-slate-500 text-[10px]">
+                  {backendConnected ? t("connectedPort") : t("disconnectedMock")}
+                </p>
               </div>
             </div>
           </div>
@@ -1555,7 +1894,7 @@ function App() {
             <div className="flex justify-between items-center pb-4 border-b border-slate-800 mb-6">
               <h3 className="text-xl font-bold flex items-center space-x-2.5">
                 <i className="fa-solid fa-sliders text-indigo-400"></i>
-                <span>Workstation Preferences</span>
+                <span>{t("prefTitle")}</span>
               </h3>
               <button 
                 onClick={() => setIsPrefOpen(false)}
@@ -1565,30 +1904,30 @@ function App() {
               </button>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-5 overflow-y-auto max-h-[60vh] pr-1 scrollbar-thin">
               {/* Startup Tab */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-450 mb-2">
-                  Default Landing Tab
+                  {t("prefLandingTab")}
                 </label>
                 <select
                   value={preferences.defaultTab}
                   onChange={(e) => setPreferences({ ...preferences, defaultTab: e.target.value })}
                   className="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-200"
                 >
-                  <option value="dashboard">Workstation Monitor (Dashboard)</option>
-                  <option value="explorer">Workstation Explorer (Directory Browser)</option>
-                  <option value="search">Search Index</option>
-                  <option value="upload">Ingest Document</option>
-                  <option value="categories">Category Master</option>
-                  <option value="backup">System Backup</option>
+                  <option value="dashboard">{t("dashboard")}</option>
+                  <option value="explorer">{t("explorer")}</option>
+                  <option value="search">{t("search")}</option>
+                  <option value="upload">{t("upload")}</option>
+                  <option value="categories">{t("categories")}</option>
+                  <option value="backup">{t("backup")}</option>
                 </select>
               </div>
 
               {/* Deduplication Strategy */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-450 mb-2">
-                  Deduplication Check
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-455 mb-2">
+                  {t("prefDeduplication")}
                 </label>
                 <div className="flex items-center space-x-3 bg-slate-955 border border-slate-800 rounded-xl p-4">
                   <input
@@ -1599,18 +1938,47 @@ function App() {
                     className="w-4 h-4 text-indigo-600 border-slate-800 rounded focus:ring-indigo-550 focus:ring-2 focus:ring-offset-slate-900 bg-slate-955"
                   />
                   <label htmlFor="dedup" className="text-sm text-slate-305 select-none cursor-pointer">
-                    Enable SHA-256 Hashing & Deduplication
+                    {t("prefEnableDedup")}
                   </label>
                 </div>
+              </div>
+
+              {/* Cache Statistics Section */}
+              <div className="bg-slate-955/40 border border-slate-800 rounded-xl p-4 space-y-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-450">
+                  {t("cacheHeading")}
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[10px] text-slate-550 uppercase font-bold block">{t("cacheSizeLabel")}</span>
+                    <span className="text-sm font-semibold text-slate-200">
+                      {storageStats ? (storageStats.uploadsSize / 1024 / 1024).toFixed(2) : "0.00"} MB
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-550 uppercase font-bold block">{t("cacheCountLabel")}</span>
+                    <span className="text-sm font-semibold text-slate-200">
+                      {storageStats && storageStats.uploadsCount !== undefined ? storageStats.uploadsCount : 0}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClearCache}
+                  className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 hover:text-white text-slate-100 font-bold rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-center space-x-1.5"
+                >
+                  <i className="fa-solid fa-trash-can text-[10px]"></i>
+                  <span>{t("btnClearCache")}</span>
+                </button>
               </div>
 
               {/* Paths Settings */}
               <div className="space-y-3">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-455">
-                  Physical Storage Paths
+                  {t("prefStoragePaths")}
                 </label>
                 <div>
-                  <span className="text-[10px] text-slate-550 font-bold block mb-1">ORGANIZED ROOT</span>
+                  <span className="text-[10px] text-slate-550 font-bold block mb-1">{t("prefOrganizedRoot")}</span>
                   <input
                     type="text"
                     value={preferences.storageRoot}
@@ -1619,7 +1987,7 @@ function App() {
                   />
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-550 font-bold block mb-1">INGEST TMP FOLDER</span>
+                  <span className="text-[10px] text-slate-550 font-bold block mb-1">{t("prefIngestTmp")}</span>
                   <input
                     type="text"
                     value={preferences.ingestTmp}
@@ -1633,7 +2001,7 @@ function App() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-450 mb-2">
-                    Auto-Backup
+                    {t("prefAutoBackup")}
                   </label>
                   <div className="flex items-center space-x-2 h-[46px] px-3 bg-slate-955 border border-slate-800 rounded-xl">
                     <input
@@ -1644,13 +2012,13 @@ function App() {
                       className="w-3.5 h-3.5 text-indigo-600 border-slate-800 rounded focus:ring-indigo-550"
                     />
                     <label htmlFor="autoSync" className="text-xs text-slate-300 select-none cursor-pointer">
-                      Auto Backup
+                      {t("prefAutoBackup")}
                     </label>
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-455 mb-2">
-                    Backup Interval
+                    {t("prefBackupInterval")}
                   </label>
                   <select
                     value={preferences.backupInterval}
@@ -1672,7 +2040,7 @@ function App() {
                 onClick={() => setIsPrefOpen(false)}
                 className="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-5 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
               >
-                Cancel
+                {t("prefBtnCancel")}
               </button>
               <button
                 onClick={() => {
@@ -1682,7 +2050,7 @@ function App() {
                 }}
                 className="bg-indigo-600 hover:bg-indigo-550 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-colors shadow-lg shadow-indigo-650/20 cursor-pointer"
               >
-                Save Changes
+                {t("prefBtnSave")}
               </button>
             </div>
           </div>
@@ -1692,11 +2060,11 @@ function App() {
       {/* Help Modal */}
       {isHelpOpen && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-2xl w-full shadow-2xl animate-scaleUp text-slate-100 flex flex-col max-h-[85vh]">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-3xl w-full shadow-2xl animate-scaleUp text-slate-100 flex flex-col max-h-[85vh]">
             <div className="flex justify-between items-center pb-4 border-b border-slate-800 mb-6 flex-shrink-0">
               <h3 className="text-xl font-bold flex items-center space-x-2.5">
                 <i className="fa-solid fa-circle-question text-indigo-400"></i>
-                <span>e-Patra Documentation & Help</span>
+                <span>{appConfig.appName} {t("helpTitle")}</span>
               </h3>
               <button 
                 onClick={() => setIsHelpOpen(false)}
@@ -1706,100 +2074,83 @@ function App() {
               </button>
             </div>
 
-            <div className="overflow-y-auto pr-2 space-y-6 flex-1 text-sm text-slate-300">
-              {/* Quick Start Guide */}
-              <section className="space-y-2">
-                <h4 className="font-bold text-indigo-400 text-base flex items-center space-x-2">
-                  <i className="fa-solid fa-rocket text-indigo-455"></i>
-                  <span>Quick Start Guide</span>
-                </h4>
-                <p className="text-xs text-slate-405">
-                  e-Patra is a secure, local-first document management system. Follow these basic workflows to manage files:
-                </p>
-                <div className="bg-slate-955 border border-slate-800/60 p-4 rounded-xl space-y-2">
-                  <div className="flex items-start space-x-2">
-                    <span className="bg-indigo-500/10 text-indigo-400 font-bold px-1.5 py-0.5 rounded text-xs">1</span>
-                    <p className="text-xs text-slate-300 mt-0.5">
-                      <strong>Define Categories</strong>: Go to the <strong>Category Master</strong> page to setup classification folder buckets (e.g. Legal, Finance).
-                    </p>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <span className="bg-indigo-500/10 text-indigo-400 font-bold px-1.5 py-0.5 rounded text-xs">2</span>
-                    <p className="text-xs text-slate-305 mt-0.5">
-                      <strong>Ingest Document</strong>: Go to the <strong>Ingest Document</strong> tab, choose a file from your computer, assign a category, and submit.
-                    </p>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <span className="bg-indigo-500/10 text-indigo-400 font-bold px-1.5 py-0.5 rounded text-xs">3</span>
-                    <p className="text-xs text-slate-305 mt-0.5">
-                      <strong>Inspect Organized Files</strong>: Go to the <strong>Workstation Explorer</strong> tab to browse files under the dynamically structured folders.
-                    </p>
-                  </div>
-                </div>
-              </section>
+            {/* Help Content layout: Left sidebar for tabs, right content pane */}
+            <div className="flex flex-1 overflow-hidden min-h-[350px]">
+              {/* Help Sidebar Tabs */}
+              <div className="w-48 border-r border-slate-800 pr-4 flex flex-col space-y-1.5 flex-shrink-0">
+                <button
+                  onClick={() => setActiveHelpTab("introduction")}
+                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
+                    activeHelpTab === "introduction"
+                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
+                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                  }`}
+                >
+                  Introduction
+                </button>
+                <button
+                  onClick={() => setActiveHelpTab("categories")}
+                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
+                    activeHelpTab === "categories"
+                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
+                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                  }`}
+                >
+                  Category Master
+                </button>
+                <button
+                  onClick={() => setActiveHelpTab("ingest")}
+                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
+                    activeHelpTab === "ingest"
+                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
+                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                  }`}
+                >
+                  Ingest Guide
+                </button>
+                <button
+                  onClick={() => setActiveHelpTab("explorer")}
+                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
+                    activeHelpTab === "explorer"
+                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
+                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                  }`}
+                >
+                  Explorer Guide
+                </button>
+                <button
+                  onClick={() => setActiveHelpTab("backup")}
+                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
+                    activeHelpTab === "backup"
+                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
+                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                  }`}
+                >
+                  Backup & Sync
+                </button>
+              </div>
 
-              {/* Physical Storage Layout */}
-              <section className="space-y-2">
-                <h4 className="font-bold text-indigo-400 text-base flex items-center space-x-2">
-                  <i className="fa-solid fa-folder-tree text-indigo-455"></i>
-                  <span>Storage Layout Strategy</span>
-                </h4>
-                <p className="text-xs text-slate-405">
-                  Ingested documents are organized physical structures on your disk based on their format and indexing timestamp:
-                </p>
-                <div className="bg-slate-955 border border-slate-800/60 p-3 rounded-xl font-mono text-[10px] text-slate-300 leading-relaxed">
-                  organized/<br />
-                  &nbsp;├── pdf/<br />
-                  &nbsp;│&nbsp;&nbsp; └── 2026/<br />
-                  &nbsp;│&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── 06/<br />
-                  &nbsp;│&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; └── annual_report.pdf<br />
-                  &nbsp;└── png/<br />
-                  &nbsp;&nbsp;&nbsp;&nbsp; └── 2026/<br />
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── 06/<br />
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── office_layout.png
-                </div>
-              </section>
-
-              {/* Deduplication & Integrity */}
-              <section className="space-y-2">
-                <h4 className="font-bold text-indigo-400 text-base flex items-center space-x-2">
-                  <i className="fa-solid fa-shield-halved text-indigo-455"></i>
-                  <span>Deduplication & Hashing</span>
-                </h4>
-                <p className="text-xs text-slate-305 leading-relaxed">
-                  Every ingested file undergoes SHA-256 integrity signature calculations. If a document matches an existing hash registry, e-Patra blocks duplicate storage to save disk space and notifies the dashboard metrics.
-                </p>
-              </section>
-
-              {/* System Diagnostics & Troubleshooting */}
-              <section className="space-y-2">
-                <h4 className="font-bold text-indigo-400 text-base flex items-center space-x-2">
-                  <i className="fa-solid fa-screwdriver-wrench text-indigo-455"></i>
-                  <span>Troubleshooting Connections</span>
-                </h4>
-                <div className="bg-slate-955 border border-slate-800/60 p-3.5 rounded-xl space-y-2 text-xs">
-                  <div>
-                    <h5 className="font-bold text-rose-455">Issue: Connected (Disconnected / Mock Mode)</h5>
-                    <p className="text-slate-450 mt-0.5 leading-relaxed">
-                      This indicates the Java Spring Boot API is not listening at <code>http://localhost:8080</code>. The frontend falls back to mock operational mode automatically. Ensure you run <code>.\dev.bat</code> to start the backend.
-                    </p>
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-amber-450">Issue: Hot Reload failure</h5>
-                    <p className="text-slate-455 mt-0.5 leading-relaxed">
-                      If Tauri fails to sync files, restart your development servers by running <code>.\clean.bat</code> followed by <code>.\dev.bat</code>.
-                    </p>
-                  </div>
-                </div>
-              </section>
+              {/* Dynamic Help Pane */}
+              <div className="flex-1 overflow-y-auto pl-6 pr-2 scrollbar-thin">
+                {renderMarkdown(helpContent)}
+              </div>
             </div>
 
-            <div className="flex justify-end pt-5 border-t border-slate-800 mt-6 flex-shrink-0">
+            <div className="flex justify-between items-center pt-5 border-t border-slate-800 mt-6 flex-shrink-0">
+              <a
+                href="https://github.com/utkarshpriyadarshi1/e-dastavej/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-350 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors flex items-center space-x-1.5 cursor-pointer border border-slate-700/60"
+              >
+                <i className="fa-solid fa-bug text-sm"></i>
+                <span>{t("githubReportBtn")}</span>
+              </a>
               <button
                 onClick={() => setIsHelpOpen(false)}
                 className="bg-indigo-600 hover:bg-indigo-550 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-indigo-650/20 cursor-pointer"
               >
-                Dismiss
+                {t("helpBtnDismiss")}
               </button>
             </div>
           </div>

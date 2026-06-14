@@ -8,10 +8,8 @@ import java.nio.file.Paths;
 @Configuration
 public class StorageConfig {
     
-    private static final String APP_DIR_NAME = ".sanchaya";
-    
     public static String getAppHomePath() {
-        return System.getProperty("user.home") + File.separator + APP_DIR_NAME;
+        return System.getProperty("user.home") + File.separator + "." + AppConfigLoader.getAppNameLower();
     }
     
     public static Path getUploadsDir() {

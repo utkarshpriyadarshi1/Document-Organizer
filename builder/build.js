@@ -88,12 +88,30 @@ console.log('\n[1/3] Packaging Backend Service (Spring Boot Jar)...');
 runCommand(mavenCmd, ['-f', path.join('backend', 'pom.xml'), 'clean', 'package', '-DskipTests'], rootDir, { MAVEN_OPTS: '-XX:+UseSerialGC -Xmx128m -XX:MaxMetaspaceSize=64m' });
 
 // 4. Bump Frontend Build Version
-console.log('\n[2/3] Bumping Frontend Version...');
-const frontendDir = path.join(rootDir, 'frontend');
-if (fs.existsSync(path.join(frontendDir, 'bump-version.cjs'))) {
-  runCommand('node', ['bump-version.cjs'], frontendDir);
+console.log('\n[2/3] Bumping Version across Workspace...');
+const builderDir = path.join(rootDir, 'builder');
+const pythonScript = path.join(builderDir, 'increment_version.py');
+if (fs.existsSync(pythonScript)) {
+  runCommand('python', ['increment_version.py', 'patch'], builderDir);
 } else {
-  console.warn('[WARNING] bump-version.cjs not found in frontend directory. Skipping version bump.');
+  console.warn('[WARNING] increment_version.py not found in builder directory. Skipping version bump.');
+}
+
+// 4.5 Copy Help Documentation
+console.log('\nCopying help documentation to frontend public directory...');
+const docsHelpDir = path.join(rootDir, 'docs', 'help');
+const publicHelpDir = path.join(rootDir, 'frontend', 'public', 'help');
+if (fs.existsSync(docsHelpDir)) {
+  if (!fs.existsSync(publicHelpDir)) {
+    fs.mkdirSync(publicHelpDir, { recursive: true });
+  }
+  const files = fs.readdirSync(docsHelpDir);
+  for (const file of files) {
+    fs.copyFileSync(path.join(docsHelpDir, file), path.join(publicHelpDir, file));
+  }
+  console.log('Successfully copied help guides to ' + publicHelpDir);
+} else {
+  console.warn('[WARNING] docs/help directory not found.');
 }
 
 // 5. Build Tauri Standalone Application
