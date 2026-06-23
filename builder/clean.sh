@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# clean.sh - Cleans e-Patra compile target files on macOS/Linux.
+# clean.sh - Cleans Notepad compile target files on macOS/Linux.
 set -euo pipefail
 
 # Change to root directory of project relative to script location
 cd "$(dirname "$0")/.."
 
 echo "==================================================="
-echo "          Cleaning e-Patra Workspace           "
+echo "          Cleaning Document Organizer Workspace           "
 echo "==================================================="
 echo
 

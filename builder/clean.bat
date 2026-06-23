@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 cd /d "%~dp0.."
 
 echo ===================================================
-echo           Cleaning e-Patra Workspace            
+echo           Cleaning Document Organizer Workspace            
 echo ===================================================
 echo.
 

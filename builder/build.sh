@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# build.sh - Compiles e-Patra Production Build on macOS/Linux.
+# build.sh - Compiles Document Organizer Production Build on macOS/Linux.
 set -euo pipefail
 
 # Change to root directory of project relative to script location
 cd "$(dirname "$0")/.."
 
 echo "==================================================="
-echo "       Compiling Sanchaya Production Build      "
+echo "       Compiling Document Organizer Production Build      "
 echo "==================================================="
 echo
 
@@ -62,6 +62,6 @@ echo
 echo "==================================================="
 echo "     [SUCCESS] Production build completed!         "
 echo "==================================================="
-echo "Backend Jar: backend/target/sanchaya-1.0-SNAPSHOT.jar"
+echo "Backend Jar: backend/target/document-organizer-1.0-SNAPSHOT.jar"
 echo "Frontend Standalone App: frontend/src-tauri/target/release/"
 echo

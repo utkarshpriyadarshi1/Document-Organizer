@@ -1,6 +1,6 @@
 # Development Phases & Feature Registry
 
-This document tracks the historical development phases, current implementation statuses, and future roadmap directions for the **Sanchaya Document Management System**.
+This document tracks the historical development phases, current implementation statuses, and future roadmap directions for the **Document Organizer Document Management System**.
 
 ---
 

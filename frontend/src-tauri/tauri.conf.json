@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "Sanchaya",
+    "productName": "Document Organizer",
     "version": "1.0.21"
   },
   "tauri": {
@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "org.sanchaya",
+      "identifier": "in.updev",
       "longDescription": "",
       "macOS": {
         "frameworks": [],
@@ -52,7 +52,7 @@
         "fullscreen": false,
         "height": 768,
         "resizable": true,
-        "title": "Sanchaya - Document Organizer",
+        "title": "Document Organizer - Store once, find anytime",
         "width": 1024
       }
     ]

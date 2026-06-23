@@ -252,7 +252,7 @@ const translations = {
 
 function App() {
   const [lang, setLang] = useState(() => {
-    return localStorage.getItem("epatra_lang") || "en";
+    return localStorage.getItem("document_organizer_lang") || "en";
   });
 
   const t = (key, params = {}) => {
@@ -264,7 +264,7 @@ function App() {
   };
 
   const [preferences, setPreferences] = useState(() => {
-    const saved = localStorage.getItem("epatra_preferences");
+    const saved = localStorage.getItem("document_organizer_preferences");
     return saved ? JSON.parse(saved) : {
       defaultTab: "dashboard",
       autoBackup: false,
@@ -280,7 +280,7 @@ function App() {
   });
 
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("epatra_theme") || "dark";
+    return localStorage.getItem("document_organizer_theme") || "dark";
   });
 
   const [isPrefOpen, setIsPrefOpen] = useState(false);
@@ -315,7 +315,7 @@ function App() {
         })
         .then(text => setHelpContent(text))
         .catch(err => {
-          setHelpContent(`### e-Patra Help\nFailed to fetch help file.\n\nError: ${err.message}`);
+          setHelpContent(`### Notepad Help\nFailed to fetch help file.\n\nError: ${err.message}`);
         });
     }
   }, [activeHelpTab, isHelpOpen]);
@@ -351,7 +351,7 @@ function App() {
   };
 
   useEffect(() => {
-    localStorage.setItem("sanchaya_theme", theme);
+    localStorage.setItem("document_organizer_theme", theme);
     if (theme === "light") {
       document.documentElement.classList.add("light");
     } else {
@@ -359,6 +359,10 @@ function App() {
     }
     addLog("info", `Workspace window theme switched to: ${theme.toUpperCase()} mode`);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("document_organizer_lang", lang);
+  }, [lang]);
 
   const [backendConnected, setBackendConnected] = useState(false);
   const [files, setFiles] = useState([]);
@@ -473,8 +477,8 @@ function App() {
           freeSpace: 120000000000,  // 120 GB
           organizedSize: 3612500,   // ~3.6 MB
           uploadsSize: 1548200,     // ~1.5 MB
-          organizedPath: "C:\\Users\\user\\Documents\\sanchaya\\organized",
-          uploadsPath: "C:\\Users\\user\\Documents\\sanchaya\\uploads"
+          organizedPath: "C:\\Users\\user\\Documents\\documentorganizer\\organized",
+          uploadsPath: "C:\\Users\\user\\Documents\\documentorganizer\\uploads"
         });
         setFileMetadata([
           { id: 1, originalPath: "C:\\Downloads\\report.pdf", storedPath: "organized/pdf/2026/05/annual_report_2026.pdf", fileType: "pdf", year: "2026", month: "05", fileSize: 1048576, hash: "a3f5b9021876cd49b387ea1023a7" },
@@ -1013,108 +1017,86 @@ function App() {
       <div className="flex flex-1 overflow-hidden">
         
         {/* Sidebar */}
-        <aside className="w-66 bg-slate-900/90 border-r border-slate-800 p-4 flex flex-col justify-between select-none">
-          <div>
-            <div className="flex items-center space-x-3 mb-8">
+        <aside className="w-18 bg-slate-900/90 border-r border-slate-800 p-3 flex flex-col items-center justify-between select-none">
+          <div className="w-full flex flex-col items-center">
+            <div className="flex items-center justify-center mb-6">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-500/30 text-white">
                 {appConfig.appName.charAt(0)}
               </div>
-              <div>
-                <h1 className="font-bold text-lg leading-none">{appConfig.appName}</h1>
-                <span className="text-[10px] text-slate-500 font-medium tracking-wide uppercase">{appConfig.subtitle}</span>
-              </div>
             </div>
 
-            <nav className="space-y-1">
+            <nav className="space-y-3 w-full flex flex-col items-center">
               <button
                 onClick={() => handleTabChange("dashboard")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "dashboard"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-chart-line text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("dashboard")}</span>
+                <i className="fa-solid fa-chart-line text-sm"></i>
               </button>
               <button
                 onClick={() => handleTabChange("explorer")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "explorer"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-folder-tree text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("explorer")}</span>
+                <i className="fa-solid fa-folder-tree text-sm"></i>
               </button>
               <button
                 onClick={() => handleTabChange("search")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "search"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-magnifying-glass text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("search")}</span>
+                <i className="fa-solid fa-magnifying-glass text-sm"></i>
               </button>
               <button
                 onClick={() => handleTabChange("upload")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "upload"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-file-import text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("upload")}</span>
+                <i className="fa-solid fa-file-import text-sm"></i>
               </button>
               <button
                 onClick={() => handleTabChange("categories")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "categories"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-tags text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("categories")}</span>
+                <i className="fa-solid fa-tags text-sm"></i>
               </button>
 
               <button
                 onClick={() => handleTabChange("backup")}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
                   activeTab === "backup"
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 }`}
               >
-                <i className="fa-solid fa-database text-sm w-4 text-center"></i>
-                <span className="text-sm">{t("backup")}</span>
+                <i className="fa-solid fa-database text-sm"></i>
               </button>
             </nav>
           </div>
 
           {/* Connection Status Indicator */}
-          <div className="bg-slate-850/40 border border-slate-800/60 p-4 rounded-2xl backdrop-blur-sm shadow-sm">
-            <div className="flex items-center space-x-2.5">
-              <span className={`w-2.5 h-2.5 rounded-full ${backendConnected ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
-              <div className="text-xs">
-                <div className="flex items-center space-x-1.5">
-                  <p className="font-semibold text-slate-350">{t("localBackend")}</p>
-                  {backendConnected && (
-                    <button onClick={syncAllData} className="text-[10px] text-indigo-400 hover:text-indigo-300 cursor-pointer">
-                      <i className="fa-solid fa-rotate-right text-xs"></i>
-                    </button>
-                  )}
-                </div>
-                <p className="text-slate-500 text-[10px]">
-                  {backendConnected ? t("connectedPort") : t("disconnectedMock")}
-                </p>
-              </div>
-            </div>
-          </div>
+          <button 
+            onClick={backendConnected ? syncAllData : undefined}
+            className={`w-10 h-10 flex items-center justify-center rounded-xl bg-slate-850/40 border border-slate-800/60 shadow-sm transition-all ${backendConnected ? "cursor-pointer hover:bg-slate-800/60 hover:text-indigo-400" : "cursor-default"}`}
+          >
+            <span className={`w-3 h-3 rounded-full ${backendConnected ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
+          </button>
         </aside>
 
         {/* Main Content Area */}
@@ -1125,9 +1107,9 @@ function App() {
             <div className="space-y-5 animate-fadeIn">
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  Workstation Monitor
+                  {t("monitorHeading")}
                 </h2>
-                <p className="text-slate-400 mt-1">Real-time telemetry of your local document database and physical storage partitions.</p>
+                <p className="text-slate-400 mt-1">{t("monitorSub")}</p>
               </div>
 
               {/* Workstation Storage Sizing Cards */}
@@ -1137,18 +1119,18 @@ function App() {
                 <div className="bg-slate-900/50 border border-slate-800/80 p-4 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-between hover:border-indigo-500/40 hover:shadow-indigo-950/20 transition-all duration-300">
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex justify-between items-center">
-                      <span>Physical Workstation Storage</span>
+                      <span>{t("localWorkstation")}</span>
                       <i className="fa-solid fa-hard-drive text-indigo-400 text-xs"></i>
                     </span>
                     <div className="flex items-baseline space-x-1.5 mt-2">
                       <span className="text-3xl font-black text-slate-100">{driveUsedGB}</span>
-                      <span className="text-xs font-bold text-slate-500">/ {driveTotalGB} GB USED</span>
+                      <span className="text-xs font-bold text-slate-500">/ {driveTotalGB} GB {t("storageUsed")}</span>
                     </div>
                   </div>
                   <div className="mt-6">
                     <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
-                      <span>{driveFreeGB} GB FREE</span>
-                      <span>{driveUsedPercent}% UTILIZATION</span>
+                      <span>{driveFreeGB} GB {t("storageFree")}</span>
+                      <span>{driveUsedPercent}% {t("storageUtilization")}</span>
                     </div>
                     <div className="w-full h-2.5 bg-slate-950 border border-slate-800/80 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full" style={{ width: `${driveUsedPercent}%` }} />
@@ -1160,22 +1142,22 @@ function App() {
                 <div className="bg-slate-900/50 border border-slate-800/80 p-4 rounded-2xl shadow-lg flex flex-col justify-between hover:border-indigo-500/40 hover:shadow-indigo-950/20 transition-all duration-300">
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex justify-between items-center">
-                      <span>Workspace Directory Sizing</span>
+                      <span>{t("storageDirSizing")}</span>
                       <i className="fa-solid fa-folder-open text-indigo-400 text-xs"></i>
                     </span>
                     <div className="grid grid-cols-2 gap-4 mt-4">
                       <div>
-                        <span className="text-[10px] text-slate-500 uppercase font-extrabold block">Organized Files</span>
+                        <span className="text-[10px] text-slate-500 uppercase font-extrabold block">{t("organizedFiles")}</span>
                         <span className="text-xl font-bold text-indigo-400">{localOrganizedSizeMB} MB</span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-slate-500 uppercase font-extrabold block">Temporary Ingests</span>
+                        <span className="text-[10px] text-slate-500 uppercase font-extrabold block">{t("tempIngests")}</span>
                         <span className="text-xl font-bold text-indigo-400">{localUploadsSizeMB} MB</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-[10px] text-slate-550 border-t border-slate-850 pt-3 mt-4">
-                    Files are indexed in a local-first portable registry.
+                    {t("indexingMsg")}
                   </div>
                 </div>
 
@@ -1183,31 +1165,31 @@ function App() {
                 <div className="bg-slate-900/50 border border-slate-800/80 p-4 rounded-2xl shadow-lg flex flex-col justify-between hover:border-indigo-500/40 hover:shadow-indigo-950/20 transition-all duration-300">
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex justify-between items-center">
-                      <span>Engine Diagnostics</span>
+                      <span>{t("diagnostics")}</span>
                       <i className="fa-solid fa-microchip text-indigo-400 text-xs"></i>
                     </span>
                     <div className="space-y-1.5 mt-3 text-xs">
                       <div className="flex justify-between">
-                        <span className="text-slate-500">DB System:</span>
-                        <span className="font-semibold text-slate-350">SQLite 3 (Local File)</span>
+                        <span className="text-slate-500">{t("dbSystem")}:</span>
+                        <span className="font-semibold text-slate-350">{t("sqliteDb")}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Deduplication:</span>
-                        <span className="font-semibold text-emerald-400">ACTIVE (SHA-256)</span>
+                        <span className="text-slate-500">{t("dedupCheck")}:</span>
+                        <span className="font-semibold text-emerald-400">{t("dedupActive")}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Workstation Host:</span>
+                        <span className="text-slate-500">{t("workstationHost")}:</span>
                         <span className="font-semibold text-slate-350">Windows (127.0.0.1)</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">JVM Runtime:</span>
+                        <span className="text-slate-500">{t("jvmRuntime")}:</span>
                         <span className="font-semibold text-slate-350">Java 21 OpenJDK</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-[10px] text-slate-550 border-t border-slate-850 pt-3 mt-2 flex justify-between">
-                    <span>Index Size: {files.length} records</span>
-                    <span className="text-indigo-400 font-bold">SECURE LOOPBACK</span>
+                    <span>{t("indexSize", { count: files.length })}</span>
+                    <span className="text-indigo-400 font-bold">{t("secureLoopback")}</span>
                   </div>
                 </div>
 
@@ -1216,8 +1198,8 @@ function App() {
               {/* Absolute Directory Paths info */}
               {storageStats && (
                 <div className="bg-slate-900/30 border border-slate-800/80 rounded-2xl p-6 font-mono text-[10px] text-slate-450 space-y-1 bg-gradient-to-r from-slate-950/20 to-transparent">
-                  <div><span className="font-bold text-slate-500">ORGANIZED ROOT:</span> {storageStats.organizedPath}</div>
-                  <div><span className="font-bold text-slate-500">INGEST TMP FOLDER:</span> {storageStats.uploadsPath}</div>
+                  <div><span className="font-bold text-slate-500">{t("prefOrganizedRoot")}:</span> {storageStats.organizedPath}</div>
+                  <div><span className="font-bold text-slate-500">{t("prefIngestTmp")}:</span> {storageStats.uploadsPath}</div>
                 </div>
               )}
 
@@ -1225,19 +1207,19 @@ function App() {
               <div className="bg-slate-900/30 border border-slate-800/80 rounded-2xl p-4">
                 <h3 className="text-base font-bold mb-3 flex items-center">
                   <i className="fa-solid fa-clock-rotate-left text-indigo-400 mr-2 text-base"></i>
-                  <span>Recent Workstation Document Changes</span>
+                  <span>{t("recentChanges")}</span>
                 </h3>
                 {files.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-slate-350">
                       <thead className="bg-slate-900/70 text-slate-400 text-xs font-bold uppercase">
                         <tr>
-                          <th className="py-2 px-3 rounded-l-xl">File Name</th>
-                          <th className="py-2 px-3">Type</th>
-                          <th className="py-2 px-3">Size</th>
-                          <th className="py-2 px-3">Category</th>
-                          <th className="py-2 px-3">Subcategory</th>
-                          <th className="py-2 px-3 rounded-r-xl">Upload Date</th>
+                          <th className="py-2 px-3 rounded-l-xl">{t("tableName")}</th>
+                          <th className="py-2 px-3">{t("tableType")}</th>
+                          <th className="py-2 px-3">{t("tableSize")}</th>
+                          <th className="py-2 px-3">{t("tableCategory")}</th>
+                          <th className="py-2 px-3">{t("tableSubcategory")}</th>
+                          <th className="py-2 px-3 rounded-r-xl">{t("tableUploadDate")}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1261,7 +1243,7 @@ function App() {
                     </table>
                   </div>
                 ) : (
-                  <div className="text-center py-10 text-slate-500">No indexed documents found. Use the **Ingest Document** tab to add files.</div>
+                  <div className="text-center py-10 text-slate-500">{t("noIndexedDoc")}</div>
                 )}
               </div>
             </div>
@@ -1272,9 +1254,9 @@ function App() {
             <div className="space-y-4 animate-fadeIn h-full flex flex-col justify-between">
               <div>
                 <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  Workstation Explorer
+                  {t("explorerHeading")}
                 </h2>
-                <p className="text-slate-400 mt-1">Browse the physically organized folder structure of the workstation on your disk.</p>
+                <p className="text-slate-400 mt-1">{t("explorerSub")}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-5 gap-5 flex-1 items-start">
@@ -1380,7 +1362,7 @@ function App() {
                     <div className="space-y-5 animate-fadeIn">
                       <div className="pb-3 border-b border-slate-800">
                         <span className="text-[10px] bg-indigo-500/10 text-indigo-400 font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                          Local Resource Metadata
+                          {t("localMetadata")}
                         </span>
                         <h4 className="text-lg font-bold text-slate-100 mt-2 break-all">
                           {selectedFileMeta.storedPath.split("/").pop()}
@@ -1389,25 +1371,25 @@ function App() {
 
                       <div className="space-y-3.5 text-xs text-slate-350">
                         <div className="bg-slate-955/40 p-3 rounded-xl border border-slate-900">
-                          <span className="text-[10px] text-slate-500 block uppercase font-bold mb-1">Stored Path (Relative)</span>
+                          <span className="text-[10px] text-slate-500 block uppercase font-bold mb-1">{t("storedPath")}</span>
                           <span className="font-mono text-indigo-400 break-all">{selectedFileMeta.storedPath}</span>
                         </div>
                         <div className="bg-slate-955/40 p-3 rounded-xl border border-slate-900">
-                          <span className="text-[10px] text-slate-500 block uppercase font-bold mb-1">Original Path</span>
+                          <span className="text-[10px] text-slate-500 block uppercase font-bold mb-1">{t("originalPath")}</span>
                           <span className="font-mono text-slate-400 break-all">{selectedFileMeta.originalPath}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-slate-955/40 p-3 rounded-xl border border-slate-900">
-                            <span className="text-[10px] text-slate-550 block uppercase font-bold mb-0.5">File Sizing</span>
+                            <span className="text-[10px] text-slate-550 block uppercase font-bold mb-0.5">{t("fileSizing")}</span>
                             <span className="font-semibold text-slate-200">{(selectedFileMeta.fileSize / 1024 / 1024).toFixed(3)} MB</span>
                           </div>
                           <div className="bg-slate-955/40 p-3 rounded-xl border border-slate-900">
-                            <span className="text-[10px] text-slate-550 block uppercase font-bold mb-0.5">Format Extension</span>
+                            <span className="text-[10px] text-slate-550 block uppercase font-bold mb-0.5">{t("formatExt")}</span>
                             <span className="font-semibold uppercase text-slate-200">{selectedFileMeta.fileType}</span>
                           </div>
                         </div>
                         <div className="bg-slate-955/40 p-3 rounded-xl border border-slate-900">
-                          <span className="text-[10px] text-slate-550 block uppercase font-bold mb-1">Deduplication Signature (SHA-256)</span>
+                          <span className="text-[10px] text-slate-550 block uppercase font-bold mb-1">{t("dedupSig")}</span>
                           <span className="font-mono text-slate-400 break-all">{selectedFileMeta.hash}</span>
                         </div>
                       </div>
@@ -1415,17 +1397,15 @@ function App() {
                       <div className="pt-6 border-t border-slate-850 flex justify-end space-x-3">
                         <button 
                           onClick={() => handleOpenLocation(selectedFileMeta.id)}
-                          className="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
+                          className="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-xl transition-colors cursor-pointer"
                         >
                           <i className="fa-solid fa-folder-closed"></i>
-                          <span>Open Location</span>
                         </button>
                         <button 
                           onClick={() => handleRunFile(selectedFileMeta.id)}
-                          className="bg-indigo-600 hover:bg-indigo-550 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors shadow-lg shadow-indigo-655/10 flex items-center space-x-1.5 cursor-pointer"
+                          className="bg-indigo-600 hover:bg-indigo-550 text-white p-2.5 rounded-xl transition-colors shadow-lg shadow-indigo-655/10 cursor-pointer"
                         >
                           <i className="fa-solid fa-play text-[10px]"></i>
-                          <span>Run Local File</span>
                         </button>
                       </div>
                     </div>
@@ -1445,9 +1425,9 @@ function App() {
             <div className="space-y-4 animate-fadeIn">
               <div>
                 <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  Search Document Index
+                  {t("searchHeading")}
                 </h2>
-                <p className="text-slate-400 mt-1">Queries the local SQLite database for matching metadata and index text.</p>
+                <p className="text-slate-400 mt-1">{t("searchSub")}</p>
               </div>
 
               {/* Filters Row */}
@@ -1520,9 +1500,8 @@ function App() {
                             </span>
                           )}
                         </div>
-                        <button className="bg-indigo-650 hover:bg-indigo-550 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-655/10 flex items-center space-x-1.5 cursor-pointer">
+                        <button className="bg-indigo-650 hover:bg-indigo-550 p-2.5 rounded-xl transition-all shadow-md shadow-indigo-655/10 cursor-pointer">
                           <i className="fa-solid fa-folder-open text-[10px]"></i>
-                          <span>Open File</span>
                         </button>
                       </div>
                     </div>
@@ -1539,9 +1518,9 @@ function App() {
             <div className="max-w-2xl space-y-4 animate-fadeIn">
               <div>
                 <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  Ingest New Document
+                  {t("ingestHeading")}
                 </h2>
-                <p className="text-slate-400 mt-1">Files are copied into the local store and hashed automatically for integrity checking.</p>
+                <p className="text-slate-400 mt-1">{t("ingestSub")}</p>
               </div>
 
               <form onSubmit={handleUploadSubmit} className="space-y-5 bg-slate-900/30 border border-slate-800/80 p-5 rounded-xl backdrop-blur-md">
@@ -1605,10 +1584,9 @@ function App() {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 font-bold rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 cursor-pointer text-white"
+                  className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center cursor-pointer text-white"
                 >
-                  <i className="fa-solid fa-file-shield text-xs"></i>
-                  <span>Index and Store File</span>
+                  <i className="fa-solid fa-file-shield text-base"></i>
                 </button>
 
                 {uploadStatus && (
@@ -1628,9 +1606,9 @@ function App() {
               <div className="flex justify-between items-center">
                 <div>
                   <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                    Category & Subcategory Master
+                    {t("categoryMasterHeading")}
                   </h2>
-                  <p className="text-slate-400 mt-1">Manage the classifications used to index files in the system database.</p>
+                  <p className="text-slate-400 mt-1">{t("categoryMasterSub")}</p>
                 </div>
               </div>
 
@@ -1687,14 +1665,14 @@ function App() {
                                   <button
                                     onClick={() => { setEditingCatId(cat.id); setEditingCatName(cat.name); }}
                                     className="text-slate-400 hover:text-slate-200 p-1 text-xs hover:bg-slate-800/40 rounded transition-colors cursor-pointer"
-                                    title="Rename Category"
+                                    
                                   >
                                     <i className="fa-solid fa-pen-to-square"></i>
                                   </button>
                                   <button
                                     onClick={() => handleDeleteCategory(cat.id)}
                                     className="text-slate-400 hover:text-rose-450 p-1 text-xs hover:bg-slate-800/40 rounded transition-colors cursor-pointer"
-                                    title="Delete Category"
+                                    
                                   >
                                     <i className="fa-solid fa-trash-can text-rose-500 hover:text-rose-400"></i>
                                   </button>
@@ -1733,14 +1711,14 @@ function App() {
                                           <button
                                             onClick={() => { setEditingSubId(sub.id); setEditingSubName(sub.name); }}
                                             className="text-[10px] text-slate-400 hover:text-slate-200 cursor-pointer"
-                                            title="Rename"
+                                            
                                           >
                                             <i className="fa-solid fa-pen text-[9px]"></i>
                                           </button>
                                           <button
                                             onClick={() => handleDeleteSubCategory(sub.id)}
                                             className="text-[10px] text-slate-400 hover:text-rose-455 cursor-pointer"
-                                            title="Delete"
+                                            
                                           >
                                             <i className="fa-solid fa-trash text-[9px]"></i>
                                           </button>
@@ -1769,10 +1747,9 @@ function App() {
                             />
                             <button
                               onClick={() => handleCreateSubCategory(cat.id)}
-                              className="bg-slate-850 hover:bg-indigo-600 text-slate-300 hover:text-white px-3 py-2 rounded-xl text-xs font-bold border border-slate-800 hover:border-indigo-600 transition-all flex items-center justify-center cursor-pointer"
+                              className="bg-slate-850 hover:bg-indigo-600 text-slate-305 hover:text-white p-2.5 rounded-xl border border-slate-800 hover:border-indigo-600 transition-all cursor-pointer"
                             >
-                              <i className="fa-solid fa-plus text-[10px] mr-1.5"></i>
-                              <span>Add</span>
+                              <i className="fa-solid fa-plus text-[10px]"></i>
                             </button>
                           </div>
                         </div>
@@ -1794,9 +1771,9 @@ function App() {
             <div className="space-y-5 animate-fadeIn">
               <div>
                 <h2 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                  System Backup & Sync
+                  {t("backupHeading")}
                 </h2>
-                <p className="text-slate-400 mt-1">Pack document directories and SQLite schema states into compressed directories.</p>
+                <p className="text-slate-400 mt-1">{t("backupSub")}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -1812,18 +1789,12 @@ function App() {
                     <button
                       onClick={handleStartBackup}
                       disabled={isBackingUp}
-                      className="py-3.5 px-6 bg-gradient-to-r from-emerald-600 to-indigo-650 hover:from-emerald-500 hover:to-indigo-550 disabled:from-slate-800 disabled:to-slate-800 text-white font-bold rounded-xl text-xs transition-all shadow-lg uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1.5 cursor-pointer"
+                      className="p-3.5 bg-gradient-to-r from-emerald-600 to-indigo-650 hover:from-emerald-500 hover:to-indigo-550 disabled:from-slate-800 disabled:to-slate-800 text-white rounded-xl transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {isBackingUp ? (
-                        <>
-                          <i className="fa-solid fa-spinner animate-spin mr-1"></i>
-                          <span>Backing up...</span>
-                        </>
+                        <i className="fa-solid fa-spinner animate-spin"></i>
                       ) : (
-                        <>
-                          <i className="fa-solid fa-cloud-arrow-up mr-1"></i>
-                          <span>Start Full Backup</span>
-                        </>
+                        <i className="fa-solid fa-cloud-arrow-up"></i>
                       )}
                     </button>
                   </div>
@@ -1965,10 +1936,9 @@ function App() {
                 <button
                   type="button"
                   onClick={handleClearCache}
-                  className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 hover:text-white text-slate-100 font-bold rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-center space-x-1.5"
+                  className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 hover:text-white text-slate-100 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
                 >
-                  <i className="fa-solid fa-trash-can text-[10px]"></i>
-                  <span>{t("btnClearCache")}</span>
+                  <i className="fa-solid fa-trash-can text-sm"></i>
                 </button>
               </div>
 
@@ -2044,7 +2014,7 @@ function App() {
               </button>
               <button
                 onClick={() => {
-                  localStorage.setItem("epatra_preferences", JSON.stringify(preferences));
+                  localStorage.setItem("document_organizer_preferences", JSON.stringify(preferences));
                   setIsPrefOpen(false);
                   addLog("info", "Saved updated workstation preferences to localStorage.");
                 }}
@@ -2141,10 +2111,9 @@ function App() {
                 href="https://github.com/utkarshpriyadarshi1/e-dastavej/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-350 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors flex items-center space-x-1.5 cursor-pointer border border-slate-700/60"
+                className="bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-350 p-2.5 rounded-xl transition-colors cursor-pointer border border-slate-700/60"
               >
                 <i className="fa-solid fa-bug text-sm"></i>
-                <span>{t("githubReportBtn")}</span>
               </a>
               <button
                 onClick={() => setIsHelpOpen(false)}
@@ -2215,10 +2184,9 @@ function App() {
                     addLog("success", "Copied terminal logs to local clipboard.");
                     alert("Logs copied to clipboard!");
                   }}
-                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center space-x-2 border border-transparent hover:border-slate-700/50"
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl transition-all cursor-pointer border border-transparent hover:border-slate-700/50"
                 >
                   <i className="fa-solid fa-copy"></i>
-                  <span>Copy to Clipboard</span>
                 </button>
                 <button
                   onClick={() => setIsLogsOpen(false)}

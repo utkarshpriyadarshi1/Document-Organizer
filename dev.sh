@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# dev.sh - Runs concurrent e-Patra development environment on macOS/Linux.
+# dev.sh - Runs concurrent Document Organizer development environment on macOS/Linux.
 set -euo pipefail
 
 echo "==================================================="
-echo "    Starting Sanchaya Development Environment    "
+echo "    Starting Document Organizer Development Environment    "
 echo "==================================================="
 echo
 

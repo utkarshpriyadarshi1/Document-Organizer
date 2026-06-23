@@ -1,6 +1,6 @@
-# Contributing to Sanchaya
+# Contributing to Document Organizer
 
-Thank you for your interest in contributing to **Sanchaya**! We welcome contributions from developers of all skill levels to help make Sanchaya a better secure, local-first document management system.
+Thank you for your interest in contributing to **Document Organizer**! We welcome contributions from developers of all skill levels to help make Document Organizer a better secure, local-first document management system.
 
 Please take a moment to review this document before submitting your contribution.
 

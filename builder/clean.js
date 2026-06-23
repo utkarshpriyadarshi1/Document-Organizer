@@ -25,7 +25,7 @@ function runCommand(command, args, cwd, env = {}) {
 }
 
 console.log('===================================================');
-console.log('       Sanchaya Cross-Platform Clean Workspace     ');
+console.log('       Document Organizer Cross-Platform Clean Workspace     ');
 console.log('===================================================');
 
 // 1. Resolve Maven command

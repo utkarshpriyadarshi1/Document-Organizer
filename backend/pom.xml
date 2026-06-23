@@ -11,8 +11,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.sanchaya</groupId>
-    <artifactId>sanchaya</artifactId>
+    <groupId>in.updev</groupId>
+    <artifactId>document-organizer</artifactId>
     <version>1.0.21-SNAPSHOT</version>
 
     <properties>

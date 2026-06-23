@@ -4,6 +4,7 @@ const path = require('path');
 const os = require('os');
 
 const rootDir = path.resolve(__dirname, '..');
+const frontendDir = path.join(rootDir, 'frontend');
 
 // Helper to check if a command exists in the system PATH
 function commandExists(cmd) {
@@ -28,7 +29,7 @@ function runCommand(command, args, cwd, env = {}) {
 }
 
 console.log('===================================================');
-console.log('       Sanchaya Cross-Platform Build Runner        ');
+console.log('       Document Organizer Cross-Platform Build Runner        ');
 console.log('===================================================');
 console.log(`Platform: ${os.platform()} (${os.arch()})`);
 console.log(`Workspace Root: ${rootDir}`);
@@ -136,7 +137,7 @@ runCommand('npm', ['run', 'tauri', 'build'], frontendDir, extraEnv);
 console.log('\n===================================================');
 console.log('     [SUCCESS] Production build completed!         ');
 console.log('===================================================');
-console.log(`Backend Jar: backend/target/sanchaya-1.0-SNAPSHOT.jar`);
+console.log(`Backend Jar: backend/target/document-organizer-1.0-SNAPSHOT.jar`);
 console.log(`Frontend Standalone App: frontend/src-tauri/target/release/`);
 console.log('===================================================\n');
 process.exit(0);

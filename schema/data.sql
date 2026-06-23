@@ -1,4 +1,4 @@
--- Default taxonomy template seeds for Sanchaya
+-- Default taxonomy template seeds for Document Organizer
 
 -- Insert master categories
 INSERT OR IGNORE INTO category (id, name) VALUES (1, 'Finance');

@@ -9,4 +9,4 @@ Ingestion imports standalone files into the system workspace, mapping them to ca
 - **Submit Indexing:** Click "Index and Store File" to initiate the process.
 
 #### SHA-256 Deduplication:
-e-Patra computes the SHA-256 cryptographic signature of every document. If the signature matches an existing indexed record, the physical storage copy is skipped, saving disk space, and mapping is established logically in the SQLite index database.
+Document Organizer computes the SHA-256 cryptographic signature of every document. If the signature matches an existing indexed record, the physical storage copy is skipped, saving disk space, and mapping is established logically in the SQLite index database.

@@ -1,6 +1,6 @@
-### Introduction to e-Patra
+### Introduction to Document Organizer
 
-e-Patra is a secure, local-first document management system. It compiles logical data records inside an embedded SQLite database and organizes physical resource layouts directly on your workstation disk.
+Document Organizer is a secure, local-first document management system. It compiles logical data records inside an embedded SQLite database and organizes physical resource layouts directly on your workstation disk.
 
 #### Core Objectives:
 - **Privacy & Security:** All index databases and files reside strictly on local loopback workstations.

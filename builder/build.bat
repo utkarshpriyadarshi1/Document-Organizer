@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 cd /d "%~dp0.."
 
 echo ===================================================
-echo        Compiling Sanchaya Production Build       
+echo        Compiling Document Organizer Production Build       
 echo ===================================================
 echo.
 
@@ -58,7 +58,7 @@ echo.
 echo ===================================================
 echo      [SUCCESS] Production build completed!         
 echo ===================================================
-echo Backend Jar: backend/target/sanchaya-1.0-SNAPSHOT.jar
+echo Backend Jar: backend/target/document-organizer-1.0-SNAPSHOT.jar
 echo Frontend Standalone App: frontend/src-tauri/target/release/
 echo.
 pause

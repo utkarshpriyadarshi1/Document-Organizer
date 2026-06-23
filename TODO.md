@@ -1,6 +1,6 @@
-# e-Patra Project Tracker
+# Document Organizer Project Tracker
 
-e-Patra is a secure, local-first document organizer designed to run completely on your local loopback workstation.
+Document Organizer is a secure, local-first document organizer designed to run completely on your local loopback workstation.
 
 ## Completed Tasks
 

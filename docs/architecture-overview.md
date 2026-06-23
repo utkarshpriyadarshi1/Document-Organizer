@@ -1,12 +1,12 @@
 # Architecture Overview
 
-This document outlines the architecture, data components, system topologies, storage layouts, and API interfaces for **Sanchaya**.
+This document outlines the architecture, data components, system topologies, storage layouts, and API interfaces for **Document Organizer**.
 
 ---
 
 ## High-Level Component Topology
 
-Sanchaya is built on a hybrid desktop client-server architecture where both layers run locally on the user workstation:
+Document Organizer is built on a hybrid desktop client-server architecture where both layers run locally on the user workstation:
 
 ```
 ┌───────────────────────────────────────┐
@@ -38,7 +38,7 @@ Sanchaya is built on a hybrid desktop client-server architecture where both laye
 
 ## Operating Modes
 
-Sanchaya operates in one of two modes based on loopback connectivity:
+Document Organizer operates in one of two modes based on loopback connectivity:
 
 ### 1. Live Local Mode
 - **Condition:** Spring Boot server running on `http://localhost:8080`.

@@ -1,12 +1,12 @@
 # Scalability & Deployment Guide
 
-This document describes how to package, deploy, and scale the **Sanchaya Document Management System** across standard desktop environments, network configurations, and intranet architectures.
+This document describes how to package, deploy, and scale the **Document Organizer Document Management System** across standard desktop environments, network configurations, and intranet architectures.
 
 ---
 
 ## Production Packaging Workflow
 
-Sanchaya utilizes a multi-step builder script to bundle the Java service and Tauri client:
+Document Organizer utilizes a multi-step builder script to bundle the Java service and Tauri client:
 
 1. **Verify Prerequisites:** Java JDK 17+, Maven 3.6+, Node.js 18+, and Rust/Cargo must be installed.
 2. **Execute build runner:**
@@ -14,7 +14,7 @@ Sanchaya utilizes a multi-step builder script to bundle the Java service and Tau
    - **Windows:** `.\build.bat` (calls `builder/build.bat`)
    - **macOS/Linux:** `./build.sh` (calls `builder/build.sh`)
 3. **Compilation Pipeline:**
-   - Maven compiles `backend/pom.xml` and packages `sanchaya-1.0.8-SNAPSHOT.jar`.
+   - Maven compiles `backend/pom.xml` and packages `document-organizer-1.0.0-SNAPSHOT.jar`.
    - Node builds React frontend static files.
    - Cargo compiles the Tauri native desktop wrapper, embedding the frontend assets and backend binary dependencies into the native executable.
    - Generates native platform installers (e.g., `.msi` for Windows, `.dmg` for macOS, `.deb` for Linux).
@@ -49,7 +49,7 @@ Windows Defender/SmartScreen flags unsigned executable binaries. Tauri requires 
 
 ## Scalability Topologies
 
-While Sanchaya is configured for local-first standalone workstations, its decoupled architecture supports multiple scaling paths:
+While Document Organizer is configured for local-first standalone workstations, its decoupled architecture supports multiple scaling paths:
 
 ### 1. Standalone Desktop Deployment (Default)
 - **Deployment:** Installed directly on a workstation.
@@ -57,7 +57,7 @@ While Sanchaya is configured for local-first standalone workstations, its decoup
 - **Pros:** Zero configuration, maximum security/privacy, offline accessibility.
 
 ### 2. Shared Network Storage (Local LAN)
-- **Deployment:** Sanchaya is installed on several computers connected to the same Local Area Network.
+- **Deployment:** Document Organizer is installed on several computers connected to the same Local Area Network.
 - **Configuration:**
   - Map the database path in `backend/src/main/resources/application.yml` to a shared network path:
     ```yaml
@@ -79,7 +79,7 @@ While Sanchaya is configured for local-first standalone workstations, its decoup
   ```yaml
   spring:
     datasource:
-      url: jdbc:postgresql://localhost:5432/sanchaya
+      url: jdbc:postgresql://localhost:5432/document-organizer
       driver-class-name: org.postgresql.Driver
   ```
   Spring Data JPA automatically translates mapping queries to PostgreSQL format, allowing dozens of concurrent uploads.

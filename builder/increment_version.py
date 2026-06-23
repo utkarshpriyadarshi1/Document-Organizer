@@ -6,7 +6,7 @@ import json
 import argparse
 
 def main():
-    parser = argparse.ArgumentParser(description="Automate version bumping across Sanchaya workspace files.")
+    parser = argparse.ArgumentParser(description="Automate version bumping across Notepad workspace files.")
     parser.add_argument("bump_type", choices=["major", "minor", "patch"], nargs="?", default="patch",
                         help="The part of the version to bump (default: patch)")
     parser.add_argument("--set", dest="new_version", help="Directly set a specific version (e.g., 1.0.6)")
@@ -84,10 +84,17 @@ def main():
             
         if "package" in tauri_conf:
             tauri_conf["package"]["version"] = new_version
-            with open(tauri_conf_path, "w", encoding="utf-8") as f:
-                json.dump(tauri_conf, f, indent=2)
-                f.write("\n")
-            print(f"Updated {os.path.relpath(tauri_conf_path, root_dir)}")
+            tauri_conf["package"]["productName"] = app_config.get("appName", "Document Organizer")
+        if "tauri" in tauri_conf:
+            if "bundle" in tauri_conf["tauri"]:
+                tauri_conf["tauri"]["bundle"]["identifier"] = "in.updev"
+            if "windows" in tauri_conf["tauri"] and len(tauri_conf["tauri"]["windows"]) > 0:
+                tauri_conf["tauri"]["windows"][0]["title"] = f"{app_config.get('appName', 'Document Organizer')} - {app_config.get('subtitle', 'Store once, find anytime')}"
+                
+        with open(tauri_conf_path, "w", encoding="utf-8") as f:
+            json.dump(tauri_conf, f, indent=2)
+            f.write("\n")
+        print(f"Updated {os.path.relpath(tauri_conf_path, root_dir)}")
             
     # 5. Update Cargo.toml
     if os.path.exists(cargo_toml_path):
@@ -116,8 +123,8 @@ def main():
         with open(pom_xml_path, "r", encoding="utf-8") as f:
             pom_content = f.read()
             
-        # Match <artifactId>sanchaya</artifactId> and the following <version> tag
-        pom_pattern = r"(<artifactId>sanchaya</artifactId>\s*<version>)([^<]+)(</version>)"
+        # Match <artifactId>document-organizer</artifactId> and the following <version> tag
+        pom_pattern = r"(<artifactId>document-organizer</artifactId>\s*<version>)([^<]+)(</version>)"
         match = re.search(pom_pattern, pom_content)
         if match:
             old_pom_version = match.group(2)

@@ -1,6 +1,6 @@
 # Relational Database Schema
 
-Sanchaya stores relational metadata index logs inside an embedded SQLite database. This document details the database configuration, schema structures, field attributes, and tables managed by Spring Data JPA.
+Document Organizer stores relational metadata index logs inside an embedded SQLite database. This document details the database configuration, schema structures, field attributes, and tables managed by Spring Data JPA.
 
 ---
 
@@ -8,7 +8,7 @@ Sanchaya stores relational metadata index logs inside an embedded SQLite databas
 
 - **Database Engine:** SQLite 3
 - **File Name:** `file_metadata.db`
-- **Default Location:** `${user.home}/.sanchaya/file_metadata.db`
+- **Default Location:** `${user.home}/.documentorganizer/file_metadata.db`
 - **Data Access Layer:** JPA (Hibernate Community Dialect for SQLite)
 - **DDL Mode:** `update` (auto-managed mapping schemas)
 

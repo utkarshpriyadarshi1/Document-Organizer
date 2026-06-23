@@ -2,7 +2,7 @@
 name = "app"
 version = "1.0.21"
 description = "A Tauri App"
-authors = ["Sanchaya Developers"]
+authors = ["Notepad Developers"]
 edition = "2021"
 rust-version = "1.59"
 

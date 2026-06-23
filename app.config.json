@@ -1,7 +1,8 @@
 {
-  "appName": "e-Patra",
-  "heading": "e-Patra Workstation",
-  "subtitle": "SECURE DOCUMENT ORGANIZER",
+  "appName": "Document Organizer",
+  "heading": "Document Organizer",
+  "subtitle": "Store once, find anytime",
+  "goal": "All files uploaded via our application remain retrievable in milliseconds, even after decades.",
   "iconPaths": {
     "ico": "icons/icon.ico",
     "png32": "icons/32x32.png",

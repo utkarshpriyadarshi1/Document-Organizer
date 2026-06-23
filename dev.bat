@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 echo ===================================================
-echo     Starting Sanchaya Development Environment   
+echo     Starting Document Organizer Development Environment   
 echo ===================================================
 echo.
 
@@ -14,10 +14,10 @@ if %errorlevel% neq 0 (
 )
 
 echo [1/2] Launching Backend Service (Spring Boot)...
-start "Sanchaya Backend" cmd /k "%MAVEN_CMD% -f backend/pom.xml spring-boot:run"
+start "Document Organizer Backend" cmd /k "%MAVEN_CMD% -f backend/pom.xml spring-boot:run"
 
 echo [2/2] Launching Frontend Client (Tauri / React)...
-start "Sanchaya Frontend" cmd /k "cd frontend && npm run tauri dev"
+start "Document Organizer Frontend" cmd /k "cd frontend && npm run tauri dev"
 
 echo.
 echo [SUCCESS] Both development servers have been spawned in separate windows!

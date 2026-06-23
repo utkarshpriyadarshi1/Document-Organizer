@@ -15,7 +15,7 @@ if (-not (Test-Path $certsDir)) {
 
 # 2. Load configuration and determine certificate subject
 $configPath = Join-Path (Get-Location) "app.config.json"
-$appName = "e-Patra"
+$appName = "Notepad"
 if (Test-Path $configPath) {
     $config = Get-Content -Raw -Path $configPath | ConvertFrom-Json
     if ($null -ne $config.appName) {
