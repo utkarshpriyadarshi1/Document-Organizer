@@ -1,4 +1,4 @@
-# Document Organizer - Local-First Document Organizer
+# Document Organizer - Store once and find anytime
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](#supported-platforms--devices)
