@@ -1,1030 +1,129 @@
-import React, { useState, useEffect } from "react";
-import appConfig from "../../app.config.json";
+import os
 
-const translations = {
-  en: {
-    system: "System Management",
+app_jsx_path = r"c:/Users/utkar/Desktop/Projects/document-organizer/frontend/src/App.jsx"
+
+with open(app_jsx_path, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# 1. Add translation keys
+en_insert = """    system: "System Management",
     systemHeading: "System Management",
     systemSub: "Monitor workstation status, manage classification taxonomies, run cold backups, and configure system preferences.",
-    dashboard: "Workstation Monitor",
-    explorer: "Workstation Explorer",
-    search: "Search Index",
-    upload: "Ingest Document",
-    categories: "Category Master",
-    backup: "System Backup",
-    localWorkstation: "Local Workstation",
-    connectedPort: "Connected (Port 8080)",
-    disconnectedMock: "Disconnected (Mock Mode)",
-    localBackend: "Local Backend",
-    monitorHeading: "Workstation Monitor",
-    monitorSub: "Real-time telemetry of your local document database and physical storage partitions.",
-    storageUsed: "USED",
-    storageFree: "FREE",
-    storageUtilization: "UTILIZATION",
-    storageDirSizing: "Workspace Directory Sizing",
-    organizedFiles: "Organized Files",
-    tempIngests: "Temporary Ingests",
-    indexingMsg: "Files are indexed in a local-first portable registry.",
-    diagnostics: "Engine Diagnostics",
-    dbSystem: "DB System",
-    sqliteDb: "SQLite 3 (Local File)",
-    dedupCheck: "Deduplication Check",
-    dedupActive: "ACTIVE (SHA-256)",
-    dedupDisabled: "DISABLED",
-    workstationHost: "Workstation Host",
-    jvmRuntime: "JVM Runtime",
-    indexSize: "Index Size: {count} records",
-    secureLoopback: "SECURE LOOPBACK",
-    recentChanges: "Recent Workstation Document Changes",
-    noIndexedDoc: "No indexed documents found. Use the Ingest Document tab to add files.",
-    tableName: "File Name",
-    tableType: "Type",
-    tableSize: "Size",
-    tableCategory: "Category",
-    tableSubcategory: "Subcategory",
-    tableUploadDate: "Upload Date",
-    explorerHeading: "Workstation Explorer",
-    explorerSub: "Browse the physically organized folder structure of the workstation on your disk.",
-    localMetadata: "Local Resource Metadata",
-    storedPath: "Stored Path (Relative)",
-    originalPath: "Original Path",
-    fileSizing: "File Sizing",
-    formatExt: "Format Extension",
-    dedupSig: "Deduplication Signature (SHA-256)",
-    btnOpenLocation: "Open Location",
-    btnRunFile: "Run Local File",
-    selectFolderMsg: "Select an organized node from the directory tree to inspect workstation resource mappings.",
-    emptyFolderMsg: "No physically organized files indexed yet. Ingest files to generate disk structure.",
-    searchHeading: "Search Document Index",
-    searchSub: "Queries the local SQLite database for matching metadata and index text.",
-    searchPlaceholder: "Search filenames or contents...",
-    allCategories: "All Categories",
-    allSubcategories: "All Subcategories",
-    allTypes: "All Types",
-    pdfDocs: "PDF Documents",
-    pngImages: "PNG Images",
-    jpgImages: "JPEG Images",
-    wordFiles: "Word Files",
-    description: "Description",
-    btnOpenFile: "Open File",
-    noMatchingDocs: "No matching indexed documents found.",
-    ingestHeading: "Ingest New Document",
-    ingestSub: "Files are copied into the local store and hashed automatically for integrity checking.",
-    selectFileLabel: "Select File",
-    dragDropMsg: "Drag & drop files or click to browse",
-    supportFormats: "Supports PDFs, Images, Word, and Excel",
-    categoryLabel: "Category",
-    selectCategory: "Select Category",
-    subcategoryLabel: "Subcategory",
-    selectSubcategory: "Select Subcategory",
-    descriptionLabel: "Description",
-    descPlaceholder: "Provide keywords or brief summary for search index...",
-    btnIndexStore: "Index and Store File",
-    categoryMasterHeading: "Category & Subcategory Master",
-    categoryMasterSub: "Manage the classifications used to index files in the system database.",
-    createNewCat: "Create New Category",
-    catNamePlaceholder: "Category Name (e.g. Engineering)",
-    btnCreate: "Create",
-    categoryRegistry: "Category Registry",
-    noCatFound: "No categories found in the registry.",
-    useFormInit: "Use the \"Create New Category\" form above to initialize classifications.",
-    subcategories: "Subcategories",
-    noSubDef: "No subcategories defined",
-    newSubPlaceholder: "New subcategory...",
-    btnAdd: "Add",
-    btnRename: "Rename",
-    btnDelete: "Delete",
-    backupHeading: "System Backup & Sync",
-    backupSub: "Pack document directories and SQLite schema states into compressed directories.",
-    coldBackup: "Workstation Cold Backup",
-    coldBackupSub: "Copies all documents in organized/ and records a DB sync point.",
-    btnStartBackup: "Start Full Backup",
-    backingUp: "Backing up...",
-    websocketTunnel: "WebSocket log sync telemetry stream",
-    backupHistory: "Archived Sync Registry",
-    noBackupHistory: "No system backup records in local registry.",
-    backupCompleted: "Backup completed: {msg}",
-    prefTitle: "Workstation Preferences",
-    prefLandingTab: "Default Landing Tab",
-    prefDeduplication: "Deduplication Check",
-    prefEnableDedup: "Enable SHA-256 Hashing & Deduplication",
-    prefStoragePaths: "Physical Storage Paths",
-    prefOrganizedRoot: "ORGANIZED ROOT",
-    prefIngestTmp: "INGEST TMP FOLDER",
-    prefAutoBackup: "Auto-Backup",
-    prefBackupInterval: "Backup Interval",
-    prefBtnCancel: "Cancel",
-    prefBtnSave: "Save Changes",
-    cacheHeading: "Application Cache Statistics",
-    cacheSizeLabel: "Cache Sizing on Disk",
-    cacheCountLabel: "Temporary File Items",
-    btnClearCache: "Clear Cache",
-    cacheClearedLog: "Purged temporary uploads folder files.",
-    helpTitle: "Documentation & Help",
-    helpBtnDismiss: "Dismiss",
-    githubReportBtn: "Report Issue on GitHub",
-    logsTitle: "Application Execution Logs",
-    logsClear: "Clear Logs",
-    logsCopy: "Copy to Clipboard",
-    logsDismiss: "Dismiss"
-  },
-  hi: {
-    system: "सिस्टम प्रबंधन",
+    dashboard: "Workstation Monitor\","""
+
+hi_insert = """    system: "सिस्टम प्रबंधन",
     systemHeading: "सिस्टम प्रबंधन",
     systemSub: "कार्यस्थान की स्थिति की निगरानी करें, वर्गीकरण प्रबंधित करें, कोल्ड बैकअप चलाएं और सिस्टम प्राथमिकताएं कॉन्फ़िगर करें।",
-    dashboard: "कार्यस्थान मॉनिटर",
-    explorer: "कार्यस्थान एक्सप्लोरर",
-    search: "खोज अनुक्रमणिका",
-    upload: "दस्तावेज़ जोड़ें",
-    categories: "श्रेणी सूची",
-    backup: "सिस्टम बैकअप",
-    localWorkstation: "स्थानीय कार्यस्थान",
-    connectedPort: "कनेक्टेड (पोर्ट 8080)",
-    disconnectedMock: "डिसकनेक्टेड (मॉक मोड)",
-    localBackend: "स्थानीय बैकएंड",
-    monitorHeading: "कार्यस्थान मॉनिटर",
-    monitorSub: "आपके स्थानीय दस्तावेज़ डेटाबेस और भौतिक भंडारण विभाजनों की वास्तविक समय टेलीमेट्री।",
-    storageUsed: "उपयोग किया गया",
-    storageFree: "खाली स्थान",
-    storageUtilization: "उपयोग दर",
-    storageDirSizing: "कार्यस्थान निर्देशिका का आकार",
-    organizedFiles: "व्यवस्थित फाइलें",
-    tempIngests: "अस्थायी दस्तावेज",
-    indexingMsg: "फाइलें एक स्थानीय-प्रथम पोर्टेबल रजिस्ट्री में अनुक्रमित की जाती हैं।",
-    diagnostics: "इंजन निदान",
-    dbSystem: "डेटाबेस सिस्टम",
-    sqliteDb: "SQLite 3 (स्थानीय फाइल)",
-    dedupCheck: "डीडुप्लीकेशन जाँच",
-    dedupActive: "सक्रिय (SHA-256)",
-    dedupDisabled: "निष्क्रिय",
-    workstationHost: "कार्यस्थान होस्ट",
-    jvmRuntime: "JVM रनटाइम",
-    indexSize: "अनुक्रमणिका आकार: {count} रिकॉर्ड",
-    secureLoopback: "सुरक्षित लूपबैक",
-    recentChanges: "हाल के कार्यस्थान दस्तावेज़ परिवर्तन",
-    noIndexedDoc: "कोई अनुक्रमित दस्तावेज़ नहीं मिला। फ़ाइलें जोड़ने के लिए दस्तावेज़ जोड़ें टैब का उपयोग करें।",
-    tableName: "फ़ाइल का नाम",
-    tableType: "प्रकार",
-    tableSize: "आकार",
-    tableCategory: "श्रेणी",
-    tableSubcategory: "उपश्रेणी",
-    tableUploadDate: "अपलोड की तारीख",
-    explorerHeading: "कार्यस्थान एक्सप्लोरर",
-    explorerSub: "अपने डिस्क पर कार्यस्थान की व्यवस्थित फ़ोल्डर संरचना ब्राउज़ करें।",
-    localMetadata: "स्थानीय संसाधन मेटाडेटा",
-    storedPath: "संग्रहीत पथ (सापेक्ष)",
-    originalPath: "मूल पथ",
-    fileSizing: "फ़ाइल का आकार",
-    formatExt: "प्रारूप एक्सटेंशन",
-    dedupSig: "डीडुप्लीकेशन हस्ताक्षर (SHA-256)",
-    btnOpenLocation: "स्थान खोलें",
-    btnRunFile: "स्थानीय फ़ाइल चलाएँ",
-    selectFolderMsg: "कार्यस्थान संसाधन मैपिंग का निरीक्षण करने के लिए निर्देशिका ट्री से एक व्यवस्थित नोड चुनें।",
-    emptyFolderMsg: "अभी तक कोई व्यवस्थित फाइलें अनुक्रमित नहीं हैं। डिस्क संरचना उत्पन्न करने के लिए फाइलें जोड़ें।",
-    searchHeading: "दस्तावेज़ अनुक्रमणिका खोजें",
-    searchSub: "मिलान मेटाडेटा और अनुक्रमणिका पाठ के लिए स्थानीय SQLite डेटाबेस से खोज करता है।",
-    searchPlaceholder: "फ़ाइल नाम या सामग्री खोजें...",
-    allCategories: "सभी श्रेणियाँ",
-    allSubcategories: "सभी उपश्रेणियाँ",
-    allTypes: "सभी प्रकार",
-    pdfDocs: "पीडीएफ दस्तावेज़",
-    pngImages: "पीएनजी छवियां",
-    jpgImages: "जेपीईजी छवियां",
-    wordFiles: "वर्ड फाइलें",
-    description: "विवरण",
-    btnOpenFile: "फ़ाइल खोलें",
-    noMatchingDocs: "कोई मिलान अनुक्रमित दस्तावेज़ नहीं मिला।",
-    ingestHeading: "नया दस्तावेज़ जोड़ें",
-    ingestSub: "सत्यता जाँच के लिए फ़ाइलें स्थानीय स्टोर में कॉपी की जाती हैं और स्वचालित रूप से हैश की जाती हैं।",
-    selectFileLabel: "फ़ाइल चुनें",
-    dragDropMsg: "फ़ाइलें खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें",
-    supportFormats: "पीडीएफ, छवियां, वर्ड और एक्सेल का समर्थन करता है",
-    categoryLabel: "श्रेणी",
-    selectCategory: "श्रेणी चुनें",
-    subcategoryLabel: "उपश्रेणी",
-    selectSubcategory: "उपश्रेणी चुनें",
-    descriptionLabel: "विवरण",
-    descPlaceholder: "खोज अनुक्रमणिका के लिए कीवर्ड या संक्षिप्त सारांश प्रदान करें...",
-    btnIndexStore: "अनुक्रमित करें और सुरक्षित करें",
-    categoryMasterHeading: "श्रेणी और उपश्रेणी व्यवस्था",
-    categoryMasterSub: "सिस्टम डेटाबेस में फाइलों को अनुक्रमित करने के लिए उपयोग किए जाने वाले वर्गीकरण प्रबंधित करें।",
-    createNewCat: "नई श्रेणी बनाएँ",
-    catNamePlaceholder: "श्रेणी का नाम (जैसे इंजीनियरिंग)",
-    btnCreate: "बनाएँ",
-    categoryRegistry: "श्रेणी रजिस्ट्री",
-    noCatFound: "रजिस्ट्री में कोई श्रेणियां नहीं मिलीं।",
-    useFormInit: "वर्गीकरण आरंभ करने के लिए ऊपर दिए गए 'नई श्रेणी बनाएँ' फ़ॉर्म का उपयोग करें।",
-    subcategories: "उपश्रेणियाँ",
-    noSubDef: "कोई उपश्रेणी परिभाषित नहीं है",
-    newSubPlaceholder: "नई उपश्रेणी...",
-    btnAdd: "जोड़ें",
-    btnRename: "नाम बदलें",
-    btnDelete: "हटाएं",
-    backupHeading: "सिस्टम बैकअप और सिंक",
-    backupSub: "दस्तावेज़ निर्देशिकाओं और SQLite स्कीमा राज्यों को संपीड़ित निर्देशिकाओं में पैक करें।",
-    coldBackup: "कार्यस्थान कोल्ड बैकअप",
-    coldBackupSub: "व्यवस्थित निर्देशिका की सभी फाइलों को कॉपी करता है और एक डेटाबेस सिंक पॉइंट रिकॉर्ड करता है।",
-    btnStartBackup: "पूर्ण बैकअप शुरू करें",
-    backingUp: "बैकअप हो रहा है...",
-    websocketTunnel: "वेबसॉकेट लॉग सिंक टेलीमेट्री स्ट्रीम",
-    backupHistory: "संग्रहीत सिंक रजिस्ट्री",
-    noBackupHistory: "स्थानीय रजिस्ट्री में कोई सिस्टम बैकअप रिकॉर्ड नहीं है।",
-    backupCompleted: "बैकअप पूरा हुआ: {msg}",
-    prefTitle: "कार्यस्थान प्राथमिकताएं",
-    prefLandingTab: "डिफ़ॉल्ट लैंडिंग टैब",
-    prefDeduplication: "डीडुप्लीकेशन जाँच",
-    prefEnableDedup: "SHA-256 हैशिंग और डीडुप्लीकेशन सक्षम करें",
-    prefStoragePaths: "भौतिक भंडारण पथ",
-    prefOrganizedRoot: "व्यवस्थित रूट",
-    prefIngestTmp: "अस्थायी फ़ोल्डर",
-    prefAutoBackup: "स्वचालित बैकअप",
-    prefBackupInterval: "बैकअप अंतराल",
-    prefBtnCancel: "रद्द करें",
-    prefBtnSave: "परिवर्तन सहेजें",
-    cacheHeading: "एप्लिकेशन कैश सांख्यिकी",
-    cacheSizeLabel: "डिस्क पर कैश का आकार",
-    cacheCountLabel: "अस्थायी फ़ाइलें",
-    btnClearCache: "कैश साफ़ करें",
-    cacheClearedLog: "अस्थायी अपलोड फ़ोल्डर फ़ाइलों को साफ़ कर दिया गया।",
-    helpTitle: "दस्तावेज़ और सहायता",
-    helpBtnDismiss: "खारिज करें",
-    githubReportBtn: "GitHub पर समस्या रिपोर्ट करें",
-    logsTitle: "एप्लिकेशन निष्पादन लॉग",
-    logsClear: "लॉग साफ़ करें",
-    logsCopy: "क्लिपबोर्ड पर कॉपी करें",
-    logsDismiss: "खारिज करें"
-  }
-};
+    dashboard: "कार्यस्थान मॉनिटर\","""
 
-function App() {
+content = content.replace('    dashboard: "Workstation Monitor",', en_insert)
+content = content.replace('    dashboard: "कार्यस्थान मॉनिटर",', hi_insert)
+
+# 2. Add sub-tab state hooks under function App() {
+state_insert = """function App() {
   const [activeSearchSubTab, setActiveSearchSubTab] = useState("searchList");
-  const [activeSystemSubTab, setActiveSystemSubTab] = useState("dashboard");
-  const [lang, setLang] = useState(() => {
-    return localStorage.getItem("document_organizer_lang") || "en";
-  });
+  const [activeSystemSubTab, setActiveSystemSubTab] = useState("dashboard");"""
 
-  const t = (key, params = {}) => {
-    let val = translations[lang][key] || translations["en"][key] || key;
-    Object.keys(params).forEach(p => {
-      val = val.replace(`{${p}}`, params[p]);
-    });
-    return val;
-  };
+content = content.replace('function App() {', state_insert)
 
-  const [preferences, setPreferences] = useState(() => {
-    const saved = localStorage.getItem("document_organizer_preferences");
-    return saved ? JSON.parse(saved) : {
-      defaultTab: "search",
-      autoBackup: false,
-      backupInterval: "24",
-      dedupStrategy: "sha256",
-      storageRoot: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\organized",
-      ingestTmp: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\uploads"
-    };
-  });
+# 3. Change default landing tab to search
+content = content.replace('defaultTab: "dashboard",', 'defaultTab: "search",')
 
-  const [activeTab, setActiveTab] = useState(() => {
-    return preferences.defaultTab || "dashboard";
-  });
-
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("document_organizer_theme") || "dark";
-  });
-
-  const [isPrefOpen, setIsPrefOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isLogsOpen, setIsLogsOpen] = useState(false);
-
-  const [appLogs, setAppLogs] = useState(() => {
-    return [
-      { timestamp: new Date().toISOString(), type: "info", message: `${appConfig.appName} Workstation Client initialized successfully.` },
-      { timestamp: new Date().toISOString(), type: "info", message: "Loaded preferences and active theme from local storage." }
-    ];
-  });
-
-  const addLog = (type, message) => {
-    const timestamp = new Date().toISOString();
-    setAppLogs(prev => [{ timestamp, type, message }, ...prev]);
-  };
-
-  useEffect(() => {
-    document.title = `${appConfig.appName} - ${appConfig.subtitle}`;
-  }, []);
-
-  const [activeHelpTab, setActiveHelpTab] = useState("introduction");
-  const [helpContent, setHelpContent] = useState("");
-
-  useEffect(() => {
-    if (isHelpOpen) {
-      fetch(`/help/${activeHelpTab}.md`)
-        .then(res => {
-          if (!res.ok) throw new Error("Help guide not found on server.");
-          return res.text();
-        })
-        .then(text => setHelpContent(text))
-        .catch(err => {
-          setHelpContent(`### Notepad Help\nFailed to fetch help file.\n\nError: ${err.message}`);
-        });
-    }
-  }, [activeHelpTab, isHelpOpen]);
-
-  const renderMarkdown = (text) => {
-    if (!text) return "";
-    const lines = text.split("\n");
-    return (
-      <div className="space-y-2">
-        {lines.map((line, idx) => {
-          if (line.startsWith("#### ")) {
-            return <h5 key={idx} className="text-xs font-bold text-indigo-400 mt-3 mb-1.5">{line.substring(5)}</h5>;
-          }
-          if (line.startsWith("### ")) {
-            return <h4 key={idx} className="text-sm font-bold text-indigo-400 mt-4 mb-2">{line.substring(4)}</h4>;
-          }
-          if (line.startsWith("## ")) {
-            return <h3 key={idx} className="text-base font-bold text-indigo-400 mt-5 mb-2">{line.substring(3)}</h3>;
-          }
-          if (line.startsWith("- ")) {
-            return <li key={idx} className="ml-4 list-disc text-xs text-slate-350 my-1">{line.substring(2)}</li>;
-          }
-          if (line.trim() === "") return <div key={idx} className="h-2" />;
-          return <p key={idx} className="text-xs text-slate-300 my-1 leading-relaxed">{line}</p>;
-        })}
-      </div>
-    );
-  };
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    addLog("info", `Navigation route changed view to: ${tab.toUpperCase()}`);
-  };
-
-  useEffect(() => {
-    localStorage.setItem("document_organizer_theme", theme);
-    if (theme === "light") {
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-    }
-    addLog("info", `Workspace window theme switched to: ${theme.toUpperCase()} mode`);
-  }, [theme]);
-
-  useEffect(() => {
-    localStorage.setItem("document_organizer_lang", lang);
-  }, [lang]);
-
-  const [backendConnected, setBackendConnected] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  // Workstation and Backup State
-  const [backupHistory, setBackupHistory] = useState([]);
-  const [backupLogs, setBackupLogs] = useState([]);
-  const [isBackingUp, setIsBackingUp] = useState(false);
-
-  // Storage Stats & Physical File Metadata
-  const [storageStats, setStorageStats] = useState(null);
-  const [fileMetadata, setFileMetadata] = useState([]);
-  const [selectedFileMeta, setSelectedFileMeta] = useState(null);
-  const [expandedFolders, setExpandedFolders] = useState({}); // key: folderPath, value: boolean
-
-  // Upload Form State
-  const [uploadFile, setUploadFile] = useState(null);
-  const [description, setDescription] = useState("");
-  const [selectedCatId, setSelectedCatId] = useState("");
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [uploadStatus, setUploadStatus] = useState("");
-
-  // Search State
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-  const [filterSubCategory, setFilterSubCategory] = useState("");
-  const [filterType, setFilterType] = useState("");
-
-  // Category Master Form State
-  const [newCatName, setNewCatName] = useState("");
-  const [newSubName, setNewSubName] = useState({}); // key: categoryId, value: subcategoryName
-  const [editingCatId, setEditingCatId] = useState(null);
-  const [editingCatName, setEditingCatName] = useState("");
-  const [editingSubId, setEditingSubId] = useState(null);
-  const [editingSubName, setEditingSubName] = useState("");
-
-  // Fetch functions
-  const fetchCategories = () => {
-    fetch("http://localhost:8080/api/categories")
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error("Error fetching categories:", err));
-  };
-
-  const fetchFiles = () => {
-    fetch("http://localhost:8080/api/files/all")
-      .then(res => res.json())
-      .then(data => setFiles(data))
-      .catch(err => console.error("Error fetching files:", err));
-  };
-
-  const fetchBackupHistory = () => {
-    fetch("http://localhost:8080/api/backup/history")
-      .then(res => res.json())
-      .then(data => setBackupHistory(data))
-      .catch(err => console.error("Error fetching backup history:", err));
-  };
-
-  const fetchStorageStats = () => {
-    fetch("http://localhost:8080/api/files/storage-stats")
-      .then(res => res.json())
-      .then(data => setStorageStats(data))
-      .catch(err => console.error("Error fetching storage stats:", err));
-  };
-
-  const fetchFileMetadata = () => {
-    fetch("http://localhost:8080/api/files/metadata")
-      .then(res => res.json())
-      .then(data => setFileMetadata(data))
-      .catch(err => console.error("Error fetching file metadata:", err));
-  };
-
-  const syncAllData = () => {
-    addLog("info", "Syncing all workspace databases and telemetry metrics...");
-    fetchCategories();
-    fetchFiles();
-    fetchBackupHistory();
-    fetchStorageStats();
-    fetchFileMetadata();
-  };
-
-  // Test backend connectivity and fetch initial data
-  useEffect(() => {
-    addLog("info", "Pinging local Spring Boot REST API service...");
-    fetch("http://localhost:8080/api/files/all", { method: "HEAD" })
-      .then(() => {
-        setBackendConnected(true);
-        addLog("success", "Connected to local Spring Boot API server on port 8080 (SQLite active).");
-        syncAllData();
-      })
-      .catch(() => {
-        setBackendConnected(false);
-        addLog("warning", "Local backend host offline. Switched workstation registry to Mock Sandbox.");
-        // Fallback mockup data in case backend is offline
-        setCategories([
-          { id: 1, name: "Finance", subCategories: [{ id: 1, name: "Reports" }, { id: 2, name: "Invoices" }] },
-          { id: 2, name: "Operations", subCategories: [{ id: 3, name: "Blueprints" }] },
-          { id: 3, name: "Legal", subCategories: [{ id: 4, name: "Contracts" }] }
-        ]);
-        setFiles([
-          { id: 1, fileName: "annual_report_2026.pdf", fileType: "application/pdf", fileSize: 1048576, category: "Finance", subCategory: "Reports", uploadDate: "2026-05-25" },
-          { id: 2, fileName: "office_layout.png", fileType: "image/png", fileSize: 2048576, category: "Operations", subCategory: "Blueprints", uploadDate: "2026-05-24" },
-          { id: 3, fileName: "terms_and_conditions.docx", fileType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileSize: 512000, category: "Legal", subCategory: "Contracts", uploadDate: "2026-05-23" }
-        ]);
-        setBackupHistory([
-          { id: 1, backupPath: "backups/backup_1716682490123", timestamp: "2026-05-25T12:00:00", status: "SUCCESS" }
-        ]);
-        setStorageStats({
-          totalSpace: 256000000000, // 256 GB
-          freeSpace: 120000000000,  // 120 GB
-          organizedSize: 3612500,   // ~3.6 MB
-          uploadsSize: 1548200,     // ~1.5 MB
-          organizedPath: "C:\\Users\\user\\Documents\\documentorganizer\\organized",
-          uploadsPath: "C:\\Users\\user\\Documents\\documentorganizer\\uploads"
-        });
-        setFileMetadata([
-          { id: 1, originalPath: "C:\\Downloads\\report.pdf", storedPath: "organized/pdf/2026/05/annual_report_2026.pdf", fileType: "pdf", year: "2026", month: "05", fileSize: 1048576, hash: "a3f5b9021876cd49b387ea1023a7" },
-          { id: 2, originalPath: "C:\\Pictures\\layout.png", storedPath: "organized/png/2026/05/office_layout.png", fileType: "png", year: "2026", month: "05", fileSize: 2048576, hash: "f928e10398ab76d203cfeb9272d1" }
-        ]);
-      });
-  }, []);
-
-
-
-  // WebSocket Backup progress handler
-  const handleStartBackup = () => {
-    addLog("info", "Starting document physical storage cold backup pack...");
-    setIsBackingUp(true);
-    setBackupLogs([
-      "[Client] Initializing document backup routine...",
-      "[Client] Establishing WebSocket log sync at ws://localhost:8080/progress..."
-    ]);
-
-    if (!backendConnected) {
-      // Mock Mode Backup
-      setTimeout(() => {
-        setBackupLogs(prev => [
-          ...prev,
-          "[Server] Connected to local backup broker successfully.",
-          "[Server] Created destination folder organized/backups/backup_mock_1716682490.",
-          "[Server] Hashing files for verification...",
-          "[Server] Copying uploads/annual_report_2026.pdf ... Done.",
-          "[Server] Copying uploads/office_layout.png ... Done.",
-          "[Server] Database indices successfully packed.",
-          "[Server] Backup completed successfully.",
-          "[Client] WebSocket logs connection closed."
-        ]);
-        const mockRecord = {
-          id: Date.now(),
-          backupPath: "backups/backup_mock_" + Math.floor(Date.now() / 1000),
-          timestamp: new Date().toISOString(),
-          status: "SUCCESS"
-        };
-        setBackupHistory([mockRecord, ...backupHistory]);
-        setIsBackingUp(false);
-        addLog("success", "Workstation cold backup pack created successfully (Mock Mode).");
-      }, 2000);
-      return;
-    }
-
-    const ws = new WebSocket("ws://localhost:8080/progress");
-
-    ws.onopen = () => {
-      setBackupLogs(prev => [...prev, "[Client] WebSocket connection established. Starting service..."]);
-      
-      fetch("http://localhost:8080/api/backup/create", {
-        method: "POST"
-      })
-        .then(res => res.text())
-        .then(result => {
-          setBackupLogs(prev => [...prev, `[Result] ${result}`]);
-          setIsBackingUp(false);
-          fetchBackupHistory();
-          fetchStorageStats();
-          addLog("success", `Workspace cold backup completed: ${result}`);
-        })
-        .catch(err => {
-          setBackupLogs(prev => [...prev, `[Error] Service request failed: ${err.message}`]);
-          setIsBackingUp(false);
-          addLog("error", `Backup pipeline failed: ${err.message}`);
-        });
-    };
-
-    ws.onmessage = (event) => {
-      setBackupLogs(prev => [...prev, `[Server] ${event.data}`]);
-    };
-
-    ws.onerror = () => {
-      setBackupLogs(prev => [...prev, "[Error] WebSocket communication failure."]);
-      addLog("error", "WebSocket connection failure during backup.");
-    };
-
-    ws.onclose = () => {
-      setBackupLogs(prev => [...prev, "[Client] WebSocket socket pipeline closed."]);
-      setIsBackingUp(false);
-      fetchBackupHistory();
-      addLog("info", "WebSocket sync tunnel closed.");
-    };
-  };
-
-  // Category CRUD Handlers
-  const handleCreateCategory = (e) => {
-    e.preventDefault();
-    if (!newCatName.trim()) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      const newCat = {
-        id: Date.now(),
-        name: newCatName.trim(),
-        subCategories: []
-      };
-      setCategories([...categories, newCat]);
-      addLog("success", `Created category classification: ${newCat.name} (Mock Mode)`);
-      setNewCatName("");
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.append("name", newCatName.trim());
-
-    fetch("http://localhost:8080/api/categories", {
-      method: "POST",
-      body: params
-    })
-      .then(res => res.json())
-      .then(() => {
-        addLog("success", `Created category classification: ${newCatName.trim()}`);
-        setNewCatName("");
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to create category: ${err.message}`);
-        console.error("Error creating category:", err);
-      });
-  };
-
-  const handleUpdateCategory = (id) => {
-    if (!editingCatName.trim()) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      setCategories(categories.map(c => c.id === id ? { ...c, name: editingCatName.trim() } : c));
-      addLog("success", `Renamed category ID ${id} to: ${editingCatName.trim()} (Mock Mode)`);
-      setEditingCatId(null);
-      setEditingCatName("");
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.append("name", editingCatName.trim());
-
-    fetch(`http://localhost:8080/api/categories/${id}`, {
-      method: "PUT",
-      body: params
-    })
-      .then(() => {
-        addLog("success", `Renamed category ID ${id} to: ${editingCatName.trim()}`);
-        setEditingCatId(null);
-        setEditingCatName("");
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to update category: ${err.message}`);
-        console.error("Error updating category:", err);
-      });
-  };
-
-  const handleDeleteCategory = (id) => {
-    if (!confirm("Are you sure you want to delete this category? All its subcategories will also be deleted.")) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      setCategories(categories.filter(c => c.id !== id));
-      addLog("warning", `Deleted category ID: ${id} (Mock Mode)`);
-      return;
-    }
-
-    fetch(`http://localhost:8080/api/categories/${id}`, {
-      method: "DELETE"
-    })
-      .then(() => {
-        addLog("warning", `Deleted category ID: ${id}`);
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to delete category: ${err.message}`);
-        console.error("Error deleting category:", err);
-      });
-  };
-
-  // Subcategory CRUD Handlers
-  const handleCreateSubCategory = (catId) => {
-    const subName = newSubName[catId];
-    if (!subName || !subName.trim()) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      setCategories(categories.map(c => {
-        if (c.id === catId) {
-          return {
-            ...c,
-            subCategories: [...c.subCategories, { id: Date.now(), name: subName.trim() }]
-          };
-        }
-        return c;
-      }));
-      addLog("success", `Created subcategory: ${subName.trim()} under category ID ${catId} (Mock Mode)`);
-      setNewSubName({ ...newSubName, [catId]: "" });
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.append("name", subName.trim());
-
-    fetch(`http://localhost:8080/api/categories/${catId}/subcategories`, {
-      method: "POST",
-      body: params
-    })
-      .then(() => {
-        addLog("success", `Created subcategory: ${subName.trim()} under category ID ${catId}`);
-        setNewSubName({ ...newSubName, [catId]: "" });
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to create subcategory: ${err.message}`);
-        console.error("Error creating subcategory:", err);
-      });
-  };
-
-  const handleUpdateSubCategory = (subId) => {
-    if (!editingSubName.trim()) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      setCategories(categories.map(c => ({
-        ...c,
-        subCategories: c.subCategories.map(s => s.id === subId ? { ...s, name: editingSubName.trim() } : s)
-      })));
-      addLog("success", `Renamed subcategory ID ${subId} to: ${editingSubName.trim()} (Mock Mode)`);
-      setEditingSubId(null);
-      setEditingSubName("");
-      return;
-    }
-
-    const params = new URLSearchParams();
-    params.append("name", editingSubName.trim());
-
-    fetch(`http://localhost:8080/api/categories/subcategories/${subId}`, {
-      method: "PUT",
-      body: params
-    })
-      .then(() => {
-        addLog("success", `Renamed subcategory ID ${subId} to: ${editingSubName.trim()}`);
-        setEditingSubId(null);
-        setEditingSubName("");
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to update subcategory: ${err.message}`);
-        console.error("Error updating subcategory:", err);
-      });
-  };
-
-  const handleDeleteSubCategory = (subId) => {
-    if (!confirm("Are you sure you want to delete this subcategory?")) return;
-
-    if (!backendConnected) {
-      // Mock mode
-      setCategories(categories.map(c => ({
-        ...c,
-        subCategories: c.subCategories.filter(s => s.id !== subId)
-      })));
-      addLog("warning", `Deleted subcategory ID: ${subId} (Mock Mode)`);
-      return;
-    }
-
-    fetch(`http://localhost:8080/api/categories/subcategories/${subId}`, {
-      method: "DELETE"
-    })
-      .then(() => {
-        addLog("warning", `Deleted subcategory ID: ${subId}`);
-        fetchCategories();
-      })
-      .catch(err => {
-        addLog("error", `Failed to delete subcategory: ${err.message}`);
-        console.error("Error deleting subcategory:", err);
-      });
-  };
-
-  // File Upload Handler
-  const handleUploadSubmit = (e) => {
-    e.preventDefault();
-    if (!uploadFile) {
-      setUploadStatus("Please select a file first.");
-      addLog("warning", "File upload aborted: No file selected.");
-      return;
-    }
-    if (!category) {
-      setUploadStatus("Please select a category.");
-      addLog("warning", "File upload aborted: No category specified.");
-      return;
-    }
-
-    setUploadStatus("Uploading to local Spring Boot SQLite service...");
-    addLog("info", `Initiating file ingest routine for: ${uploadFile.name}...`);
-
-    if (!backendConnected) {
-      // Mock Mode Upload
-      setTimeout(() => {
-        const newFile = {
-          id: Date.now(),
-          fileName: uploadFile.name,
-          fileType: uploadFile.type || "unknown",
-          fileSize: uploadFile.size,
-          category: category,
-          subCategory: subCategory || "General",
-          uploadDate: new Date().toISOString().split('T')[0]
-        };
-        setFiles([newFile, ...files]);
-        setUploadStatus("File successfully stored and indexed! (Mock Mode)");
-        addLog("success", `Ingested resource: ${uploadFile.name} successfully (Mock Sandbox).`);
-        setUploadFile(null);
-        setDescription("");
-        setSelectedCatId("");
-        setCategory("");
-        setSubCategory("");
-      }, 1500);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", uploadFile);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("subCategory", subCategory || "General");
-
-    fetch("http://localhost:8080/api/files/upload", {
-      method: "POST",
-      body: formData
-    })
-      .then(async res => {
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.message || "Upload failed");
-        }
-        return res.json();
-      })
-      .then(() => {
-        setUploadStatus("File successfully stored and indexed!");
-        addLog("success", `Ingested resource: ${uploadFile.name} successfully and packed on disk.`);
-        setUploadFile(null);
-        setDescription("");
-        setSelectedCatId("");
-        setCategory("");
-        setSubCategory("");
-        fetchFiles();
-        fetchStorageStats();
-        fetchFileMetadata();
-      })
-      .catch(err => {
-        setUploadStatus("Error uploading file: " + err.message);
-        addLog("error", `Failed to ingest resource ${uploadFile.name}: ${err.message}`);
-      });
-  };
-
-  // Live File Search
-  const handleSearch = () => {
-    if (!backendConnected) return;
-
-    const params = new URLSearchParams();
-    params.append("query", searchQuery);
-    if (filterCategory) params.append("category", filterCategory);
-    if (filterSubCategory) params.append("subCategory", filterSubCategory);
-    if (filterType) params.append("fileType", filterType);
-
-    fetch(`http://localhost:8080/api/files/search?${params.toString()}`)
-      .then(res => res.json())
-      .then(data => setFiles(data))
-      .catch(err => console.error("Search error:", err));
-  };
-
-  useEffect(() => {
-    if (backendConnected) {
-      handleSearch();
-    }
-  }, [searchQuery, filterCategory, filterSubCategory, filterType, backendConnected]);
-
-  // Dropdown options helper
-  const handleCategoryChange = (catId) => {
-    setSelectedCatId(catId);
-    if (catId === "") {
-      setCategory("");
-      setSubCategory("");
-    } else {
-      const catObj = categories.find(c => c.id === parseInt(catId));
-      setCategory(catObj ? catObj.name : "");
-      setSubCategory("");
-    }
-  };
-
-  const selectedCatObj = categories.find(c => c.id === parseInt(selectedCatId));
-  const availableSubCategories = selectedCatObj ? selectedCatObj.subCategories : [];
-
-  const filterCatObj = categories.find(c => c.name === filterCategory);
-  const filterSubCatsAvailable = filterCatObj ? filterCatObj.subCategories : [];
-
-  // Directory Tree builder helper
-  const buildDirectoryTree = () => {
-    const tree = {};
-    fileMetadata.forEach(meta => {
-      const type = meta.fileType || "unknown";
-      const year = meta.year || "unknown";
-      const month = meta.month || "unknown";
-
-      if (!tree[type]) tree[type] = {};
-      if (!tree[type][year]) tree[type][year] = {};
-      if (!tree[type][year][month]) tree[type][year][month] = [];
-
-      tree[type][year][month].push(meta);
-    });
-    return tree;
-  };
-
-  const toggleFolder = (path) => {
-    setExpandedFolders(prev => ({
-      ...prev,
-      [path]: !prev[path]
-    }));
-  };
-
-  const handleOpenLocation = (id) => {
-    fetch(`http://localhost:8080/api/files/metadata/${id}/open-location`, { method: "POST" })
-      .then(res => {
-        if (!res.ok) throw new Error("Could not open location");
-      })
-      .catch(err => console.error("Error opening location:", err));
-  };
-
-  const handleRunFile = (id) => {
-    fetch(`http://localhost:8080/api/files/metadata/${id}/run`, { method: "POST" })
-      .then(res => {
-        if (!res.ok) throw new Error("Could not launch file");
-      })
-      .catch(err => console.error("Error launching file:", err));
-  };
-
-  const handleClearCache = () => {
-    addLog("info", "Clearing temporary cache directory...");
-    if (!backendConnected) {
-      setTimeout(() => {
-        setStorageStats(prev => ({
-          ...prev,
-          uploadsSize: 0,
-          uploadsCount: 0
-        }));
-        addLog("success", t("cacheClearedLog") + " (Mock Mode)");
-      }, 1000);
-      return;
-    }
-
-    fetch("http://localhost:8080/api/files/clear-cache", { method: "POST" })
-      .then(res => res.json())
-      .then(data => {
-        addLog("success", `Temporary cache folder cleared. Deleted ${data.deletedCount} files.`);
-        fetchStorageStats();
-      })
-      .catch(err => {
-        addLog("error", `Failed to clear cache: ${err.message}`);
-      });
-  };
-
-  // Metrics helper
-  const totalSizeMB = files.reduce((acc, f) => acc + f.fileSize, 0) / 1024 / 1024;
-  const dirTree = buildDirectoryTree();
-
-  // Storage utilization variables
-  const driveTotalGB = storageStats ? (storageStats.totalSpace / 1024 / 1024 / 1024).toFixed(1) : "0";
-  const driveFreeGB = storageStats ? (storageStats.freeSpace / 1024 / 1024 / 1024).toFixed(1) : "0";
-  const driveUsedGB = storageStats ? ((storageStats.totalSpace - storageStats.freeSpace) / 1024 / 1024 / 1024).toFixed(1) : "0";
-  const driveUsedPercent = storageStats ? Math.round(((storageStats.totalSpace - storageStats.freeSpace) / storageStats.totalSpace) * 100) : 0;
-  const localOrganizedSizeMB = storageStats ? (storageStats.organizedSize / 1024 / 1024).toFixed(2) : "0";
-  const localUploadsSizeMB = storageStats ? (storageStats.uploadsSize / 1024 / 1024).toFixed(2) : "0";
-
-  return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 font-sans select-none antialiased">
-      
-      {/* Workstation Desktop Titlebar */}
-      <header className="bg-slate-900 border-b border-slate-800/80 px-4 py-2 flex items-center justify-between select-none">
-        {/* Client Window Title */}
-        <div className="text-xs font-semibold text-slate-400 tracking-wider flex items-center space-x-2">
-          <i className="fa-solid fa-box-archive text-indigo-400 text-[11px]"></i>
-          <span>{appConfig.appName} {t("localWorkstation")}</span>
-        </div>
-
-        {/* Top-Right Controls */}
-        <div className="flex items-center space-x-2">
-          {/* Host loopback context tag */}
-          <div className="text-[10px] bg-slate-955 border border-slate-800/60 text-indigo-400 px-2.5 py-0.5 rounded-full font-bold tracking-wide uppercase">
-            {t("localWorkstation")}
-          </div>
-
-          {/* i18n Language Toggle Button */}
+# 4. Update header preferences cog button action
+old_pref_btn = """          {/* Preferences Button */}
           <button
-            onClick={() => setLang(lang === "en" ? "hi" : "en")}
+            onClick={() => setIsPrefOpen(true)}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
           >
-            <i className="fa-solid fa-language text-indigo-400 text-[11px]"></i>
-          </button>
+            <i className="fa-solid fa-sliders text-[11px]"></i>
+          </button>"""
 
-          {/* Theme Toggle Button */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-          >
-            {theme === "dark" ? (
-              <i className="fa-solid fa-sun text-amber-500 text-[11px]"></i>
-            ) : (
-              <i className="fa-solid fa-moon text-indigo-400 text-[11px]"></i>
-            )}
-          </button>
-
-          {/* Preferences Button */}
+new_pref_btn = """          {/* Preferences Button */}
           <button
             onClick={() => { setActiveTab("system"); setActiveSystemSubTab("preferences"); }}
             className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
           >
             <i className="fa-solid fa-sliders text-[11px]"></i>
-          </button>
+          </button>"""
 
-          {/* Help Button */}
-          <button
-            onClick={() => setIsHelpOpen(true)}
-            className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-          >
-            <i className="fa-solid fa-circle-question text-[11px]"></i>
-          </button>
+content = content.replace(old_pref_btn, new_pref_btn)
 
-          {/* Live Logs Button */}
-          <button
-            onClick={() => setIsLogsOpen(true)}
-            className="p-1.5 rounded-lg bg-slate-955 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-indigo-400 transition-all cursor-pointer flex items-center justify-center h-7 w-7"
-          >
-            <i className="fa-solid fa-terminal text-[11px]"></i>
-          </button>
-        </div>
-      </header>
+# 5. Update SidebarAside navigation
+old_sidebar = """        {/* Sidebar */}
+        <aside className="w-18 bg-slate-900/90 border-r border-slate-800 p-3 flex flex-col items-center justify-between select-none">
+          <div className="w-full flex flex-col items-center">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-indigo-500/30 text-white">
+                {appConfig.appName.charAt(0)}
+              </div>
+            </div>
 
-      {/* Main Container */}
-      <div className="flex flex-1 overflow-hidden">
-        
-        {/* Sidebar */}
+            <nav className="space-y-3 w-full flex flex-col items-center">
+              <button
+                onClick={() => handleTabChange("dashboard")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "dashboard"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-chart-line text-sm"></i>
+              </button>
+              <button
+                onClick={() => handleTabChange("explorer")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "explorer"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-folder-tree text-sm"></i>
+              </button>
+              <button
+                onClick={() => handleTabChange("search")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "search"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-magnifying-glass text-sm"></i>
+              </button>
+              <button
+                onClick={() => handleTabChange("upload")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "upload"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-file-import text-sm"></i>
+              </button>
+              <button
+                onClick={() => handleTabChange("categories")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "categories"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-tags text-sm"></i>
+              </button>
+
+              <button
+                onClick={() => handleTabChange("backup")}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${
+                  activeTab === "backup"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20 font-semibold"
+                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                }`}
+              >
+                <i className="fa-solid fa-database text-sm"></i>
+              </button>
+            </nav>
+          </div>"""
+
+new_sidebar = """        {/* Sidebar */}
         <aside className="w-18 bg-slate-900/90 border-r border-slate-800 p-3 flex flex-col items-center justify-between select-none">
           <div className="w-full flex flex-col items-center">
             <div className="flex items-center justify-center mb-6">
@@ -1065,19 +164,28 @@ function App() {
                 <i className="fa-solid fa-sliders text-sm"></i>
               </button>
             </nav>
-          </div>
+          </div>"""
 
-          {/* Connection Status Indicator */}
-          <button 
-            onClick={backendConnected ? syncAllData : undefined}
-            className={`w-10 h-10 flex items-center justify-center rounded-xl bg-slate-850/40 border border-slate-800/60 shadow-sm transition-all ${backendConnected ? "cursor-pointer hover:bg-slate-800/60 hover:text-indigo-400" : "cursor-default"}`}
-          >
-            <span className={`w-3 h-3 rounded-full ${backendConnected ? "bg-emerald-500 animate-pulse" : "bg-rose-500"}`} />
-          </button>
-        </aside>
+content = content.replace(old_sidebar, new_sidebar)
 
-        {/* Main Content Area */}
-        <main className="flex-1 p-6 overflow-y-auto bg-slate-955/60 backdrop-blur-lg">
+# 6. Replace Main Content Area
+# Let's extract the old main content area and replace it.
+# We'll search for the block between '<main className="flex-1 p-6 overflow-y-auto bg-slate-955/60 backdrop-blur-lg">' and '</main>'
+main_start = '<main className="flex-1 p-6 overflow-y-auto bg-slate-955/60 backdrop-blur-lg">'
+main_end = '</main>'
+
+start_idx = content.find(main_start)
+end_idx = content.find(main_end, start_idx)
+
+if start_idx == -1 or end_idx == -1:
+    print("Failed to locate <main> tags")
+    os._exit(1)
+
+old_main_body = content[start_idx + len(main_start) : end_idx]
+
+# Let's check: we will insert search tab, upload tab, and system tab
+# But first, let's write out the system tab components (Dashboard, Categories, Backup, Preferences)
+new_main_body = """
           
           {/* Ingest Tab */}
           {activeTab === "upload" && (
@@ -2050,183 +1158,27 @@ function App() {
               )}
             </div>
           )}
-</main>
-      </div>
+"""
 
-      {/* Help Modal */}
-      {isHelpOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-3xl w-full shadow-2xl animate-scaleUp text-slate-100 flex flex-col max-h-[85vh]">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-800 mb-6 flex-shrink-0">
-              <h3 className="text-xl font-bold flex items-center space-x-2.5">
-                <i className="fa-solid fa-circle-question text-indigo-400"></i>
-                <span>{appConfig.appName} {t("helpTitle")}</span>
-              </h3>
-              <button 
-                onClick={() => setIsHelpOpen(false)}
-                className="text-slate-400 hover:text-slate-200 text-lg hover:bg-slate-800 px-2.5 py-1 rounded-lg transition-all cursor-pointer"
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            </div>
+# Let's replace the whole main block
+content = content[:start_idx + len(main_start)] + new_main_body + content[end_idx:]
 
-            {/* Help Content layout: Left sidebar for tabs, right content pane */}
-            <div className="flex flex-1 overflow-hidden min-h-[350px]">
-              {/* Help Sidebar Tabs */}
-              <div className="w-48 border-r border-slate-800 pr-4 flex flex-col space-y-1.5 flex-shrink-0">
-                <button
-                  onClick={() => setActiveHelpTab("introduction")}
-                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
-                    activeHelpTab === "introduction"
-                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
-                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
-                  }`}
-                >
-                  Introduction
-                </button>
-                <button
-                  onClick={() => setActiveHelpTab("categories")}
-                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
-                    activeHelpTab === "categories"
-                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
-                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
-                  }`}
-                >
-                  Category Master
-                </button>
-                <button
-                  onClick={() => setActiveHelpTab("ingest")}
-                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
-                    activeHelpTab === "ingest"
-                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
-                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
-                  }`}
-                >
-                  Ingest Guide
-                </button>
-                <button
-                  onClick={() => setActiveHelpTab("explorer")}
-                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
-                    activeHelpTab === "explorer"
-                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
-                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
-                  }`}
-                >
-                  Explorer Guide
-                </button>
-                <button
-                  onClick={() => setActiveHelpTab("backup")}
-                  className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl transition-all ${
-                    activeHelpTab === "backup"
-                      ? "bg-indigo-600/20 text-indigo-400 border border-indigo-500/25"
-                      : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
-                  }`}
-                >
-                  Backup & Sync
-                </button>
-              </div>
+# 7. Remove Preferences Modal at the bottom
+# Let's see what was the preferences modal block:
+# It starts at '{/* Preferences Modal */}' (line 1861)
+# Let's find it.
+pref_modal_start = '      {/* Preferences Modal */}'
+pref_modal_end = '      {/* Help Modal */}'
 
-              {/* Dynamic Help Pane */}
-              <div className="flex-1 overflow-y-auto pl-6 pr-2 scrollbar-thin">
-                {renderMarkdown(helpContent)}
-              </div>
-            </div>
+p_start_idx = content.find(pref_modal_start)
+p_end_idx = content.find(pref_modal_end)
 
-            <div className="flex justify-between items-center pt-5 border-t border-slate-800 mt-6 flex-shrink-0">
-              <a
-                href="https://github.com/utkarshpriyadarshi1/e-dastavej/issues"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-350 p-2.5 rounded-xl transition-colors cursor-pointer border border-slate-700/60"
-              >
-                <i className="fa-solid fa-bug text-sm"></i>
-              </a>
-              <button
-                onClick={() => setIsHelpOpen(false)}
-                className="bg-indigo-600 hover:bg-indigo-550 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-indigo-650/20 cursor-pointer"
-              >
-                {t("helpBtnDismiss")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+if p_start_idx != -1 and p_end_idx != -1:
+    # Delete preferences modal block
+    content = content[:p_start_idx] + content[p_end_idx:]
 
-      {/* App Logs Modal */}
-      {isLogsOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-2xl w-full shadow-2xl animate-scaleUp text-slate-100 flex flex-col max-h-[80vh]">
-            <div className="flex justify-between items-center pb-4 border-b border-slate-800 mb-6 flex-shrink-0">
-              <h3 className="text-xl font-bold flex items-center space-x-2.5">
-                <i className="fa-solid fa-terminal text-indigo-400"></i>
-                <span>Application Execution Logs</span>
-              </h3>
-              <button 
-                onClick={() => setIsLogsOpen(false)}
-                className="text-slate-400 hover:text-slate-200 hover:bg-slate-800 px-2.5 py-1 rounded-lg transition-all cursor-pointer"
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            </div>
+# Write updated App.jsx back to disk
+with open(app_jsx_path, 'w', encoding='utf-8') as f:
+    f.write(content)
 
-            {/* Live Terminal Log Stream */}
-            <div className="flex-1 overflow-y-auto font-mono text-[11px] bg-slate-955 border border-slate-800/80 rounded-2xl p-5 space-y-2.5 scrollbar-thin shadow-inner min-h-[300px]">
-              {appLogs.map((log, index) => {
-                let badgeClass = "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20";
-                if (log.type === "success") badgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-                if (log.type === "warning") badgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
-                if (log.type === "error") badgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
-
-                return (
-                  <div key={index} className="flex items-start space-x-3 hover:bg-slate-900/40 p-1.5 rounded-lg transition-all border border-transparent hover:border-slate-850/50">
-                    <span className="text-slate-500 select-none whitespace-nowrap">
-                      {new Date(log.timestamp).toLocaleTimeString()}
-                    </span>
-                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${badgeClass}`}>
-                      {log.type}
-                    </span>
-                    <span className="text-slate-300 break-all">{log.message}</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="flex justify-between pt-5 border-t border-slate-800 mt-6 flex-shrink-0">
-              <button
-                onClick={() => {
-                  setAppLogs([
-                    { timestamp: new Date().toISOString(), type: "info", message: "Console logs cleared by workstation administrator." }
-                  ]);
-                }}
-                className="bg-slate-800 hover:bg-slate-750 hover:text-rose-400 text-slate-450 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer border border-transparent hover:border-slate-700/50"
-              >
-                Clear Logs
-              </button>
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => {
-                    const text = appLogs.map(l => `[${l.timestamp}] [${l.type.toUpperCase()}] ${l.message}`).join("\n");
-                    navigator.clipboard.writeText(text);
-                    addLog("success", "Copied terminal logs to local clipboard.");
-                    alert("Logs copied to clipboard!");
-                  }}
-                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl transition-all cursor-pointer border border-transparent hover:border-slate-700/50"
-                >
-                  <i className="fa-solid fa-copy"></i>
-                </button>
-                <button
-                  onClick={() => setIsLogsOpen(false)}
-                  className="bg-indigo-650 hover:bg-indigo-550 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-indigo-650/20 cursor-pointer"
-                >
-                  Dismiss
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default App;
+print("App.jsx refactored successfully to simplify UI!")
