@@ -14,19 +14,11 @@ public class StorageConfig {
     }
     
     public static Path getUploadsDir() {
-        String customPath = PreferenceService.getPreference("ingestTmp", null);
-        if (customPath != null && !customPath.trim().isEmpty()) {
-            return Paths.get(customPath).toAbsolutePath();
-        }
-        return Paths.get(getAppHomePath(), "uploads").toAbsolutePath();
+        return Paths.get(PreferenceService.getIngestTmp()).toAbsolutePath();
     }
     
     public static Path getOrganizedDir() {
-        String customPath = PreferenceService.getPreference("storageRoot", null);
-        if (customPath != null && !customPath.trim().isEmpty()) {
-            return Paths.get(customPath).toAbsolutePath();
-        }
-        return Paths.get(getAppHomePath(), "organized").toAbsolutePath();
+        return Paths.get(PreferenceService.getStorageRoot()).toAbsolutePath();
     }
     
     public static Path getBackupsDir() {

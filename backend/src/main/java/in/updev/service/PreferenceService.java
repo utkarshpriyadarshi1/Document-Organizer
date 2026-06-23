@@ -107,4 +107,20 @@ public class PreferenceService {
         }
         return cachedPrefs.getOrDefault(key, defaultValue);
     }
+
+    public static String getStorageRoot() {
+        return getPreference("storageRoot", Paths.get(System.getProperty("user.home"), "." + AppConfigLoader.getAppNameLower(), "organized").toAbsolutePath().toString());
+    }
+
+    public static String getIngestTmp() {
+        return getPreference("ingestTmp", Paths.get(System.getProperty("user.home"), "." + AppConfigLoader.getAppNameLower(), "uploads").toAbsolutePath().toString());
+    }
+
+    public static String getFolderLayout() {
+        return getPreference("folderLayout", "default");
+    }
+
+    public static String getDedupStrategy() {
+        return getPreference("dedupStrategy", "sha256");
+    }
 }

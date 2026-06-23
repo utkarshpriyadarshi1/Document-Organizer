@@ -1345,82 +1345,9 @@ function App() {
                         <i className="fa-solid fa-folder-tree text-indigo-400 mr-1.5"></i> <span>organized /</span>
                       </h3>
 
-                      {Object.keys(dirTree).length > 0 ? (
+                      {dirTree && (Object.keys(dirTree.children).length > 0 || dirTree.files.length > 0) ? (
                         <div className="space-y-3.5 font-sans">
-                          {Object.keys(dirTree).map(type => {
-                            const typePath = type;
-                            const isTypeExpanded = expandedFolders[typePath];
-                            return (
-                              <div key={type} className="space-y-1.5">
-                                <div
-                                  onClick={() => toggleFolder(typePath)}
-                                  className="flex items-center space-x-2 text-sm font-bold text-slate-200 hover:text-indigo-400 cursor-pointer select-none py-1 px-2 hover:bg-slate-850/40 rounded-lg transition-colors"
-                                >
-                                  <i className={`fa-solid ${isTypeExpanded ? "fa-folder-open text-indigo-400" : "fa-folder text-indigo-500"} mr-1 text-xs`}></i>
-                                  <span>{type}</span>
-                                </div>
-
-                                {isTypeExpanded && (
-                                  <div className="pl-6 space-y-1.5 border-l border-slate-850 ml-3">
-                                    {Object.keys(dirTree[type]).map(year => {
-                                      const yearPath = `${type}/${year}`;
-                                      const isYearExpanded = expandedFolders[yearPath];
-                                      return (
-                                        <div key={year} className="space-y-1.5">
-                                          <div
-                                            onClick={() => toggleFolder(yearPath)}
-                                            className="flex items-center space-x-2 text-xs font-bold text-slate-350 hover:text-indigo-400 cursor-pointer select-none py-1 px-2 hover:bg-slate-850/40 rounded-lg transition-colors"
-                                          >
-                                            <i className={`fa-solid ${isYearExpanded ? "fa-folder-open text-indigo-400" : "fa-folder text-indigo-550"} mr-1 text-[10px]`}></i>
-                                            <span>{year}</span>
-                                          </div>
-
-                                          {isYearExpanded && (
-                                            <div className="pl-6 space-y-1 border-l border-slate-850 ml-3">
-                                              {Object.keys(dirTree[type][year]).map(month => {
-                                                const monthPath = `${type}/${year}/${month}`;
-                                                const isMonthExpanded = expandedFolders[monthPath];
-                                                return (
-                                                  <div key={month} className="space-y-1">
-                                                    <div
-                                                      onClick={() => toggleFolder(monthPath)}
-                                                      className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-indigo-400 cursor-pointer select-none py-0.5 px-2 hover:bg-slate-850/40 rounded-lg transition-colors"
-                                                    >
-                                                      <i className={`fa-solid ${isMonthExpanded ? "fa-folder-open text-indigo-455" : "fa-folder text-indigo-600"} mr-1 text-[9px]`}></i>
-                                                      <span>{month}</span>
-                                                    </div>
-
-                                                    {isMonthExpanded && (
-                                                      <div className="pl-5 space-y-0.5 border-l border-slate-850 ml-2">
-                                                        {dirTree[type][year][month].map(meta => (
-                                                          <div
-                                                            key={meta.id}
-                                                            onClick={() => setSelectedFileMeta(meta)}
-                                                            className={`flex items-center space-x-1.5 text-xs py-1 px-2.5 rounded-lg cursor-pointer transition-colors ${
-                                                              selectedFileMeta?.id === meta.id
-                                                                ? "bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 font-medium"
-                                                                : "text-slate-450 hover:bg-slate-850/55 hover:text-slate-300 border border-transparent"
-                                                            }`}
-                                                          >
-                                                            <i className="fa-solid fa-file-lines text-slate-450 mr-1.5 text-[9px]"></i>
-                                                            <span className="truncate max-w-[150px]">{meta.storedPath.split("/").pop()}</span>
-                                                          </div>
-                                                        ))}
-                                                      </div>
-                                                    )}
-                                                  </div>
-                                                );
-                                              })}
-                                            </div>
-                                          )}
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
+                          {renderTreeNodes(dirTree)}
                         </div>
                       ) : (
                         <div className="text-center py-12 text-slate-555 text-xs italic">

@@ -95,7 +95,7 @@ public class FileService {
         String year = String.valueOf(Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getYear());
         String month = String.format("%02d", Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getMonthValue());
 
-        String folderLayout = PreferenceService.getPreference("folderLayout", "default");
+        String folderLayout = PreferenceService.getFolderLayout();
         String relativePath;
 
         if ("category".equalsIgnoreCase(folderLayout)) {
@@ -117,7 +117,7 @@ public class FileService {
 
         try {
             String hash = generateFileHash(source);
-            String dedupStrategy = PreferenceService.getPreference("dedupStrategy", "sha256");
+            String dedupStrategy = PreferenceService.getDedupStrategy();
             if ("sha256".equalsIgnoreCase(dedupStrategy)) {
                 Optional<FileMetadata> existingFile = fileMetadataRepository.findByHash(hash);
                 if (existingFile.isPresent()) {
