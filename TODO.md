@@ -12,6 +12,7 @@ Document Organizer is a secure, local-first document organizer designed to run c
 * **Fa Iconography migration:** Fully moved legacy layout iconography to Font Awesome Free styles without verbose labels/tooltips.
 * **Automated Packaging certs:** Rewrote `setup-cert.ps1` to configure windows signing certificate dynamically.
 * **Automated Version bumps:** Updated `increment_version.py` script to bump and synchronize versions across `app.config.json`, `package.json`, `tauri.conf.json`, `Cargo.toml`, and Maven `pom.xml`.
+* **UI Simplification & Consolidations:** Streamlined sidebar navigation to three core views (Search & Browse, Ingest Document, System Management) and consolidated Explorer, Telemetry Monitor, Category Master, Backups, and User Preferences as nested sub-tabs.
 
 ## Pending Tasks (Roadmap)
 

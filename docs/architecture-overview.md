@@ -27,7 +27,10 @@ Document Organizer is built on a hybrid desktop client-server architecture where
 
 1. **Frontend (Tauri + React + Vanilla CSS):**
    - Renders the desktop GUI shell using Tauri (Rust-based web container).
-   - Manages dashboards, categories, file ingestion interfaces, and indexing logs.
+   - Implements a simplified three-tab navigation layout:
+     - **Search & Browse**: Consolidates Search Registry (multi-criteria queries) and Browse Workspace (folder directory tree explorer) as sub-tabs.
+     - **Ingest Document**: Unified interface to select, tag, and index new files.
+     - **System Management**: Groups diagnostics (Workstation Monitor), master taxonomy settings (Category Master), workstation cold backups, and user preferences (like default landing tab and storage paths) under sub-tabs.
    - Operates in a **Mock Sandbox Mode** if the local JVM backend is unreachable.
 
 2. **Backend (Spring Boot 3 + SQLite):**

@@ -14,7 +14,7 @@ Document Organizer utilizes a multi-step builder script to bundle the Java servi
    - **Windows:** `.\build.bat` (calls `builder/build.bat`)
    - **macOS/Linux:** `./build.sh` (calls `builder/build.sh`)
 3. **Compilation Pipeline:**
-   - Maven compiles `backend/pom.xml` and packages `document-organizer-1.0.0-SNAPSHOT.jar`.
+   - Maven compiles `backend/pom.xml` and packages the backend jar (e.g., `document-organizer-1.0.21-SNAPSHOT.jar`).
    - Node builds React frontend static files.
    - Cargo compiles the Tauri native desktop wrapper, embedding the frontend assets and backend binary dependencies into the native executable.
    - Generates native platform installers (e.g., `.msi` for Windows, `.dmg` for macOS, `.deb` for Linux).

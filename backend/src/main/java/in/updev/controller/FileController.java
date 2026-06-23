@@ -148,7 +148,7 @@ public class FileController {
             return ResponseEntity.notFound().build();
         }
         FileMetadata metadata = metadataOpt.get();
-        File file = new File(StorageConfig.getAppHomePath(), metadata.getStoredPath());
+        File file = StorageConfig.resolveStoredPath(metadata.getStoredPath()).toFile();
         if (!file.exists()) {
             return ResponseEntity.status(400).body(Map.of("message", "Physical file does not exist on disk: " + file.getAbsolutePath()));
         }
@@ -168,7 +168,7 @@ public class FileController {
             return ResponseEntity.notFound().build();
         }
         FileMetadata metadata = metadataOpt.get();
-        File file = new File(StorageConfig.getAppHomePath(), metadata.getStoredPath());
+        File file = StorageConfig.resolveStoredPath(metadata.getStoredPath()).toFile();
         if (!file.exists()) {
             return ResponseEntity.status(400).body(Map.of("message", "Physical file does not exist on disk: " + file.getAbsolutePath()));
         }

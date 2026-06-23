@@ -55,7 +55,7 @@ public class FileService {
         fileRepository.saveFile(fileInfo);
 
         try {
-            storeFile(file.getPath());
+            storeFile(file.getPath(), category, subCategory);
         } catch (Exception e) {
             // Delete the temporary uploaded file to prevent orphan files on disk
             if (file.exists()) {
@@ -78,6 +78,10 @@ public class FileService {
     }
 
     public String storeFile(String filePath) throws Exception {
+        return storeFile(filePath, null, null);
+    }
+
+    public String storeFile(String filePath, String category, String subCategory) throws Exception {
         Path source = Paths.get(filePath);
         String fileType = Files.probeContentType(source);
         if (fileType != null && fileType.contains("/")) {
@@ -91,21 +95,38 @@ public class FileService {
         String year = String.valueOf(Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getYear());
         String month = String.format("%02d", Files.getLastModifiedTime(source).toInstant().atZone(java.time.ZoneId.systemDefault()).getMonthValue());
 
-        String newPath = "organized/" + fileType + "/" + year + "/" + month + "/" + source.getFileName();
-        Path destination = Paths.get(StorageConfig.getAppHomePath(), newPath);
+        String folderLayout = PreferenceService.getPreference("folderLayout", "default");
+        String relativePath;
+
+        if ("category".equalsIgnoreCase(folderLayout)) {
+            String catFolder = (category != null && !category.trim().isEmpty()) ? category.trim() : "Uncategorized";
+            String subCatFolder = (subCategory != null && !subCategory.trim().isEmpty()) ? subCategory.trim() : "General";
+            catFolder = catFolder.replaceAll("[\\\\/:*?\"<>|]", "_");
+            subCatFolder = subCatFolder.replaceAll("[\\\\/:*?\"<>|]", "_");
+            relativePath = "organized/" + catFolder + "/" + subCatFolder + "/" + year + "/" + month + "/" + source.getFileName();
+        } else if ("chronological".equalsIgnoreCase(folderLayout)) {
+            relativePath = "organized/" + year + "/" + month + "/" + fileType + "/" + source.getFileName();
+        } else {
+            relativePath = "organized/" + fileType + "/" + year + "/" + month + "/" + source.getFileName();
+        }
+
+        Path destination = StorageConfig.resolveStoredPath(relativePath);
 
         Files.createDirectories(destination.getParent());
         Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
 
         try {
             String hash = generateFileHash(source);
-            Optional<FileMetadata> existingFile = fileMetadataRepository.findByHash(hash);
-            if (existingFile.isPresent()) {
-                Files.delete(destination); // Remove duplicate
-                throw new IllegalArgumentException("Duplicate file detected: A file with the same content signature already exists in the archive.");
+            String dedupStrategy = PreferenceService.getPreference("dedupStrategy", "sha256");
+            if ("sha256".equalsIgnoreCase(dedupStrategy)) {
+                Optional<FileMetadata> existingFile = fileMetadataRepository.findByHash(hash);
+                if (existingFile.isPresent()) {
+                    Files.delete(destination); // Remove duplicate
+                    throw new IllegalArgumentException("Duplicate file detected: A file with the same content signature already exists in the archive.");
+                }
             }
 
-            FileMetadata metadata = new FileMetadata(null, filePath, newPath, fileType, year, month, Files.size(source), hash);
+            FileMetadata metadata = new FileMetadata(null, filePath, relativePath, fileType, year, month, Files.size(source), hash);
             fileMetadataRepository.save(metadata);
         } catch (Exception e) {
             // Clean up copied physical file in organized/ folder to prevent stray disk allocations
@@ -115,7 +136,7 @@ public class FileService {
             throw e;
         }
 
-        return "File stored at: " + newPath;
+        return "File stored at: " + relativePath;
     }
 
     public List<FileMetadata> getAllMetadata() {

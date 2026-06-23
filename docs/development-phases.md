@@ -25,6 +25,7 @@ This document tracks the historical development phases, current implementation s
 | **Category Master** | Relational categorization setup panels in the UI | **Completed** |
 | **Multi-Criteria Search** | Combined queries by category, extension, tags, and date limits | **Completed** |
 | **System Integrations** | Direct "Open Location" folder highlight and default app execution triggers | **Completed** |
+| **UI Simplification** | Consolidated sidebar navigation (Search/Browse, Ingest, System Hub) and tab structures | **Completed** |
 
 ---
 
@@ -47,11 +48,16 @@ This document tracks the historical development phases, current implementation s
 - Created cold backup mechanisms copy-replicating directory structure.
 - Configured Spring WebSockets streaming active progress logs to the UI terminal console.
 
-### Phase 4: Local Security & Station Partitioning (Planned)
+### Phase 4: UI Simplification & Navigation Consolidation (Completed)
+- Simplified sidebar layout to three main navigation icons: Search & Browse, Ingest Document, and System Management.
+- Consolidated Search Registry and Browse Workspace explorer under the Search & Browse tab.
+- Grouped Status telemetry, Category Master registries, Backups, and preferences under the System Management Hub.
+
+### Phase 5: Local Security & Station Partitioning (Planned)
 - Implement workstation permission levels (`ADMIN`, `MANAGER`, `STAFF`, `CLERK`, `PUBLIC`).
 - Add BCrypt-hashed local database user accounts.
 - Restrict file execution and delete operations via API-level Spring Security filters.
 
-### Phase 5: Advanced Archive Packages (Planned)
+### Phase 6: Advanced Archive Packages (Planned)
 - Add single-file compressed `.zip` backup generation.
 - Implement JSON metadata import/export utilities for registry synchronization.

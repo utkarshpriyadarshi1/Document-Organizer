@@ -126,7 +126,12 @@ const translations = {
     logsTitle: "Application Execution Logs",
     logsClear: "Clear Logs",
     logsCopy: "Copy to Clipboard",
-    logsDismiss: "Dismiss"
+    logsDismiss: "Dismiss",
+    folderLayoutLabel: "Folder Layout Structure",
+    folderLayoutDefault: "Default (Type / Year / Month)",
+    folderLayoutCategory: "Category-Based (Category / Subcategory / Year / Month)",
+    folderLayoutChronological: "Chronological (Year / Month / Type)",
+    folderLayoutHelp: "Determines the physical directory layout inside the organized archive when new files are ingested."
   },
   hi: {
     system: "सिस्टम प्रबंधन",
@@ -252,7 +257,12 @@ const translations = {
     logsTitle: "एप्लिकेशन निष्पादन लॉग",
     logsClear: "लॉग साफ़ करें",
     logsCopy: "क्लिपबोर्ड पर कॉपी करें",
-    logsDismiss: "खारिज करें"
+    logsDismiss: "खारिज करें",
+    folderLayoutLabel: "फ़ोल्डर लेआउट संरचना",
+    folderLayoutDefault: "डिफ़ॉल्ट (प्रकार / वर्ष / महीना)",
+    folderLayoutCategory: "श्रेणी-आधारित (श्रेणी / उपश्रेणी / वर्ष / महीना)",
+    folderLayoutChronological: "कालानुक्रमिक (वर्ष / महीना / प्रकार)",
+    folderLayoutHelp: "यह निर्धारित करता है कि नई फ़ाइलों के आने पर व्यवस्थित संग्रह के अंदर भौतिक निर्देशिका लेआउट कैसा होगा।"
   }
 };
 
@@ -273,13 +283,15 @@ function App() {
 
   const [preferences, setPreferences] = useState(() => {
     const saved = localStorage.getItem("document_organizer_preferences");
-    return saved ? JSON.parse(saved) : {
-      defaultTab: "search",
-      autoBackup: false,
-      backupInterval: "24",
-      dedupStrategy: "sha256",
-      storageRoot: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\organized",
-      ingestTmp: "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\uploads"
+    const parsed = saved ? JSON.parse(saved) : {};
+    return {
+      defaultTab: parsed.defaultTab || "search",
+      autoBackup: parsed.autoBackup !== undefined ? parsed.autoBackup : false,
+      backupInterval: parsed.backupInterval || "24",
+      dedupStrategy: parsed.dedupStrategy || "sha256",
+      storageRoot: parsed.storageRoot || "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\organized",
+      ingestTmp: parsed.ingestTmp || "C:\\Users\\user\\Documents\\" + appConfig.appName.toLowerCase() + "\\uploads",
+      folderLayout: parsed.folderLayout || "default"
     };
   });
 
@@ -410,6 +422,26 @@ function App() {
   const [editingSubName, setEditingSubName] = useState("");
 
   // Fetch functions
+  const fetchPreferences = () => {
+    fetch("http://localhost:8080/api/preferences")
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setPreferences(prev => ({
+            ...prev,
+            defaultTab: data.defaultTab || prev.defaultTab,
+            autoBackup: data.autoBackup === "true",
+            backupInterval: data.backupInterval || prev.backupInterval,
+            dedupStrategy: data.dedupStrategy || prev.dedupStrategy,
+            storageRoot: data.storageRoot || prev.storageRoot,
+            ingestTmp: data.ingestTmp || prev.ingestTmp,
+            folderLayout: data.folderLayout || prev.folderLayout
+          }));
+        }
+      })
+      .catch(err => console.error("Error fetching preferences:", err));
+  };
+
   const fetchCategories = () => {
     fetch("http://localhost:8080/api/categories")
       .then(res => res.json())
@@ -447,6 +479,7 @@ function App() {
 
   const syncAllData = () => {
     addLog("info", "Syncing all workspace databases and telemetry metrics...");
+    fetchPreferences();
     fetchCategories();
     fetchFiles();
     fetchBackupHistory();
@@ -1944,6 +1977,25 @@ function App() {
                       </div>
                     </div>
 
+                    {/* Folder Layout Structure */}
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                        {t("folderLayoutLabel")}
+                      </label>
+                      <select
+                        value={preferences.folderLayout || "default"}
+                        onChange={(e) => setPreferences({ ...preferences, folderLayout: e.target.value })}
+                        className="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-200 font-sans"
+                      >
+                        <option value="default">{t("folderLayoutDefault")}</option>
+                        <option value="category">{t("folderLayoutCategory")}</option>
+                        <option value="chronological">{t("folderLayoutChronological")}</option>
+                      </select>
+                      <span className="text-[10px] text-slate-500 mt-1.5 block">
+                        {t("folderLayoutHelp")}
+                      </span>
+                    </div>
+
                     {/* Cache Statistics Section */}
                     <div className="bg-slate-955/40 border border-slate-800 rounded-xl p-4 space-y-3">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-slate-450">
@@ -2040,6 +2092,36 @@ function App() {
                       onClick={() => {
                         localStorage.setItem("document_organizer_preferences", JSON.stringify(preferences));
                         addLog("info", "Saved updated workstation preferences to localStorage.");
+                        if (backendConnected) {
+                          const body = {
+                            defaultTab: preferences.defaultTab,
+                            autoBackup: preferences.autoBackup ? "true" : "false",
+                            backupInterval: preferences.backupInterval,
+                            dedupStrategy: preferences.dedupStrategy,
+                            storageRoot: preferences.storageRoot,
+                            ingestTmp: preferences.ingestTmp,
+                            folderLayout: preferences.folderLayout || "default"
+                          };
+                          fetch("http://localhost:8080/api/preferences", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(body)
+                          })
+                            .then(res => {
+                              if (!res.ok) throw new Error("Failed to save backend preferences");
+                              return res.json();
+                            })
+                            .then(() => {
+                              addLog("success", "Synchronized preferences with backend server.");
+                              fetchStorageStats();
+                              fetchFileMetadata();
+                            })
+                            .catch(err => {
+                              addLog("error", "Failed to sync preferences with backend: " + err.message);
+                            });
+                        }
                       }}
                       className="bg-indigo-600 hover:bg-indigo-550 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-colors shadow-lg shadow-indigo-650/20 cursor-pointer"
                     >
