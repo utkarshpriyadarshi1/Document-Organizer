@@ -1,6 +1,6 @@
 [package]
 name = "app"
-version = "1.0.21"
+version = "1.0.24"
 description = "A Tauri App"
 authors = ["Notepad Developers"]
 edition = "2021"

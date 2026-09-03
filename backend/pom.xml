@@ -13,7 +13,7 @@
 
     <groupId>in.updev</groupId>
     <artifactId>document-organizer</artifactId>
-    <version>1.0.21-SNAPSHOT</version>
+    <version>1.0.24-SNAPSHOT</version>
 
     <properties>
         <java.version>17</java.version>
